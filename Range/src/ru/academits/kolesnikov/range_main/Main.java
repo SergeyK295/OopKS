@@ -2,6 +2,8 @@ package ru.academits.kolesnikov.range_main;
 
 import ru.academits.kolesnikov.range.Range;
 
+import java.util.Arrays;
+
 import java.util.Scanner;
 
 public class Main {
@@ -32,42 +34,44 @@ public class Main {
 
         Range range2 = new Range(from2, to2);
 
-        Range rangeIntersect = range1.getRangeIntersect(range1, range2);
+        Range intersection = range1.getIntersection(range2);
 
-        if (rangeIntersect == null) {
+        if (intersection == null) {
             System.out.println("Нет диапазона пересечения");
         } else {
-            System.out.println("Интервал диапазона пресечения: от " + rangeIntersect.getFrom() + ", до " + rangeIntersect.getTo());
-            System.out.println("Длина диапазона пресечения = " + (rangeIntersect.getTo() - rangeIntersect.getFrom()));
+            System.out.println("Интервал диапазона пресечения: " + intersection);
+            System.out.println("Длина диапазона пресечения = " + intersection.getLength());
         }
 
         System.out.println();
 
-        Range[] rangeMerge = range1.getRangeMerge(range1, range2);
+        Range[] merge = range1.getUnion(range2);
 
-        if (rangeMerge.length == 1) {
-            System.out.println("Интервал объединенного диапазона: от " + rangeMerge[0].getFrom() + ", до " + rangeMerge[0].getTo());
-            System.out.println("Длина объединенного диапазона = " + (rangeMerge[0].getTo() - rangeMerge[0].getFrom()));
+        if (merge.length == 1) {
+            System.out.println("Интервал объединенного диапазона: " + Arrays.toString(merge));
+            System.out.println("Длина объединенного диапазона = " + merge[0].getLength());
         } else {
             System.out.println("Нет диапазона пересечения для объединения интервалов");
+            System.out.println("Интервалы двух диапазонов: " + Arrays.toString(merge));
+            System.out.println("Длина первого диапазона = " + merge[0].getLength());
+            System.out.println("Длина второго диапазона = " + merge[1].getLength());
         }
 
         System.out.println();
 
-        Range[] rangeDifference = range1.getRangeDifference(range1, range2);
+        Range[] difference = range1.getDifference(range2);
 
-        if (rangeDifference [0] == null) {
+        if (difference.length == 0) {
             System.out.println("Интервалы диапазонов равны");
-            System.out.println("Разность диапазонов = 0");
-        } else if (rangeDifference.length == 1) {
-            System.out.println("Интервал разности двух диапазонов: от " + rangeDifference[0].getFrom() + ", до " + rangeDifference[0].getTo());
-            System.out.println("Длина разности двух диапазонов  = " + (rangeDifference[0].getTo() - rangeDifference[0].getFrom()));
+            System.out.println("Разность диапазонов: " + Arrays.toString(difference));
+        } else if (difference.length == 1) {
+            System.out.println("Интервал разности двух диапазонов: " + Arrays.toString(difference));
+            System.out.println("Длина разности двух диапазонов  = " + difference[0].getLength());
         } else {
             System.out.println("Результатом вычитания двух диапазонов является 2 диапазона");
-            System.out.println("Интервал первого диапазона: от " + rangeDifference[0].getFrom() + ", до " + rangeDifference[0].getTo());
-            System.out.println("Длина первого диапазона = " + (rangeDifference[0].getTo() - rangeDifference[0].getFrom()));
-            System.out.println("Интервал второго диапазона: от " + rangeDifference[1].getFrom() + ", до " + rangeDifference[1].getTo());
-            System.out.println("Длина второго диапазона = " + (rangeDifference[1].getTo() - rangeDifference[1].getFrom()));
+            System.out.println("Интервалы двух диапазонов: " + Arrays.toString(difference));
+            System.out.println("Длина первого диапазона = " + difference[0].getLength());
+            System.out.println("Длина второго диапазона = " + difference[1].getLength());
         }
     }
 }
