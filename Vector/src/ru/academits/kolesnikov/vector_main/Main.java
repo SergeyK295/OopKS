@@ -1,7 +1,6 @@
 package ru.academits.kolesnikov.vector_main;
 
 import ru.academits.kolesnikov.vector.Vector;
-//import static ru.academits.kolesnikov.vector.Vector.*;
 
 public class Main {
     public static void main(String[] args) {
