@@ -1,10 +1,8 @@
 package ru.academits.kolesnikov.shapes_main;
 
 import java.util.Comparator;
-
 import ru.academits.kolesnikov.comparator.AreaShapesComparator;
 import ru.academits.kolesnikov.shapes.*;
-
 import java.util.*;
 
 public class Main {

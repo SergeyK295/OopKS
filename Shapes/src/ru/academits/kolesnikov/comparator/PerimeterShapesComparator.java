@@ -1,7 +1,6 @@
 package ru.academits.kolesnikov.comparator;
 
 import ru.academits.kolesnikov.shapes.Shapes;
-
 import java.util.Comparator;
 
 public class PerimeterShapesComparator implements Comparator<Shapes> {
