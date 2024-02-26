@@ -18,10 +18,10 @@ public class Vector {
     }
 
     public Vector(Vector vector) {
-        this.array = new double[vector.array.length];
+        array = new double[vector.array.length];
 
         for (int i = 0, n = vector.array.length; i < n; i++) {
-            this.array[i] = vector.array[i];
+            array[i] = vector.array[i];
         }
     }
 
@@ -55,36 +55,36 @@ public class Vector {
     }
 
     public void vectorAddition(Vector vector) {
-        if (this.array.length < vector.array.length) {
-            Vector vector2 = new Vector(vector.array.length, this.array);
-            this.array = vector2.array;
+        if (array.length < vector.array.length) {
+            Vector vector2 = new Vector(vector.array.length, array);
+            array = vector2.array;
         }
 
         for (int i = 0; i < vector.array.length; i++) {
-            this.array[i] += vector.array[i];
+            array[i] += vector.array[i];
         }
     }
 
     public void vectorSubtraction(Vector vector) {
-        if (this.array.length < vector.array.length) {
-            Vector vector2 = new Vector(vector.array.length, this.array);
-            this.array = vector2.array;
+        if (array.length < vector.array.length) {
+            Vector vector2 = new Vector(vector.array.length, array);
+            array = vector2.array;
         }
 
         for (int i = 0; i < vector.array.length; i++) {
-            this.array[i] -= vector.array[i];
+            array[i] -= vector.array[i];
         }
     }
 
     public void vectorMultiplication(double scalar) {
         for (int i = 0; i < array.length; i++) {
-            this.array[i] *= scalar;
+            array[i] *= scalar;
         }
     }
 
     public void vectorReverse() {
         for (int i = 0; i < array.length; i++) {
-            this.array[i] = array[i] * (-1);
+            array[i] = array[i] * (-1);
         }
     }
 
@@ -92,7 +92,7 @@ public class Vector {
         double vectorSize = 0;
 
         for (int i = 0; i < array.length; i++) {
-            vectorSize += Math.pow(this.array[i], 2);
+            vectorSize += Math.pow(array[i], 2);
         }
 
         return Math.sqrt(vectorSize);
@@ -120,18 +120,18 @@ public class Vector {
             return true;
         }
 
-        if (o == null || o.getClass() != this.getClass()) {
+        if (o == null || o.getClass() != getClass()) {
             return false;
         }
 
         Vector v = (Vector) o;
 
-        if (v.array.length != this.array.length) {
+        if (v.array.length != array.length) {
             return false;
         }
 
-        for (int i = 0; i < this.array.length; i++) {
-            if (v.array[i] != this.array[i]) {
+        for (int i = 0; i < array.length; i++) {
+            if (v.array[i] != array[i]) {
                 return false;
             }
         }
