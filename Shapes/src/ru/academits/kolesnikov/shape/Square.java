@@ -1,10 +1,10 @@
-package ru.academits.kolesnikov.shapes;
+package ru.academits.kolesnikov.shape;
 
-public class Square implements Shapes {
+public class Square implements Shape {
     private final double sideLength;
 
-    public Square(double width) {
-        this.sideLength = width;
+    public Square(double sideLength) {
+        this.sideLength = sideLength;
     }
 
     @Override
@@ -29,7 +29,10 @@ public class Square implements Shapes {
 
     @Override
     public String toString() {
-        return "Фигура - квадрат" + System.lineSeparator() + "Длина стороны = " + sideLength + System.lineSeparator() + "Площадь = " + getArea() + System.lineSeparator() + "Периметр = " + getPerimeter();
+        return "Фигура - квадрат" + System.lineSeparator()
+                + "Длина стороны = " + sideLength + System.lineSeparator()
+                + "Площадь = " + getArea() + System.lineSeparator()
+                + "Периметр = " + getPerimeter();
     }
 
     @Override

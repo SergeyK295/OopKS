@@ -1,6 +1,6 @@
-package ru.academits.kolesnikov.shapes;
+package ru.academits.kolesnikov.shape;
 
-public class Triangle implements Shapes {
+public class Triangle implements Shape {
     private final double x1;
     private final double y1;
     private final double x2;
@@ -8,12 +8,12 @@ public class Triangle implements Shapes {
     private final double x3;
     private final double y3;
 
-    public Triangle(double x1, double x2, double x3, double y1, double y2, double y3) {
+    public Triangle(double x1, double y1, double x2, double y2, double x3, double y3) {
         this.x1 = x1;
-        this.x2 = x2;
-        this.x3 = x3;
         this.y1 = y1;
+        this.x2 = x2;
         this.y2 = y2;
+        this.x3 = x3;
         this.y3 = y3;
     }
 
@@ -41,20 +41,20 @@ public class Triangle implements Shapes {
         return y3;
     }
 
-    public double getSideLength(double n1, double n2, double n3) {
-        double max = Math.max(n1, Math.max(n2, n3));
-        double min = Math.min(n1, Math.min(n2, n3));
+    private static double getMaxDistanceBetweenNumbers(double number1, double number2, double number3) {
+        double max = Math.max(number1, Math.max(number2, number3));
+        double min = Math.min(number1, Math.min(number2, number3));
         return max - min;
     }
 
     @Override
     public double getWidth() {
-        return getSideLength(x1, x2, x3);
+        return getMaxDistanceBetweenNumbers(x1, x2, x3);
     }
 
     @Override
     public double getHeight() {
-        return getSideLength(y1, y2, y3);
+        return getMaxDistanceBetweenNumbers(y1, y2, y3);
     }
 
     @Override
@@ -79,8 +79,11 @@ public class Triangle implements Shapes {
 
     @Override
     public String toString() {
-        String vertexCoordinates = "(" + x1 + ";" + y1 + "), " + "(" + x2 + ";" + y2 + "), " + "(" + x3 + ";" + y3 + ")";
-        return "Фигура - треугольник" + System.lineSeparator() + "Координаты вершин: " + vertexCoordinates + System.lineSeparator() + "Площадь = " + getArea() + System.lineSeparator() + "Периметр = " + getPerimeter();
+        String vertexesCoordinates = "(" + x1 + "; " + y1 + "), (" + x2 + "; " + y2 + "), (" + x3 + "; " + y3 + ")";
+        return "Фигура - треугольник" + System.lineSeparator()
+                + "Координаты вершин: " + vertexesCoordinates + System.lineSeparator()
+                + "Площадь = " + getArea() + System.lineSeparator()
+                + "Периметр = " + getPerimeter();
     }
 
     @Override

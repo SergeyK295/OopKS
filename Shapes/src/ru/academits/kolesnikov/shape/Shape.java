@@ -1,6 +1,6 @@
-package ru.academits.kolesnikov.shapes;
+package ru.academits.kolesnikov.shape;
 
-public interface Shapes {
+public interface Shape {
     double getWidth();
 
     double getHeight();
