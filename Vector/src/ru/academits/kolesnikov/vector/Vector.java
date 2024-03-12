@@ -3,189 +3,138 @@ package ru.academits.kolesnikov.vector;
 import java.util.Arrays;
 
 public class Vector {
-    private double[] array;
+    private double[] vectorComponents;
 
-    public Vector(int n) {
-        if (n <= 0) {
-            throw new IllegalArgumentException("Размерность вектора равна <= 0");
+    public Vector(int vectorSize) {
+        if (vectorSize <= 0) {
+            throw new IllegalArgumentException("Размерность вектора: " + vectorSize + " должна быть больше 0");
         }
 
-        array = new double[n];
-
-        for (int i = 0; i < n; i++) {
-            array[i] = 0;
-        }
+        vectorComponents = new double[vectorSize];
     }
 
     public Vector(Vector vector) {
-        array = new double[vector.array.length];
+        vectorComponents = Arrays.copyOf(vector.vectorComponents, vector.vectorComponents.length);
+    }
 
-        for (int i = 0, n = vector.array.length; i < n; i++) {
-            array[i] = vector.array[i];
+    public Vector(double[] vectorComponents) {
+        if (vectorComponents.length == 0) {
+            throw new IllegalArgumentException("Размер передаваемого массива = 0");
+        }
+
+        this.vectorComponents = new double[vectorComponents.length];
+
+        for (int i = 0; i < vectorComponents.length; i++) {
+            this.vectorComponents[i] = vectorComponents[i];
         }
     }
 
-    public Vector(double[] array) {
-        this.array = new double[array.length];
-
-        for (int i = 0, n = array.length; i < n; i++) {
-            this.array[i] = array[i];
-        }
-    }
-
-    public Vector(int n, double[] array) {
-        if (n <= 0) {
+    public Vector(int vectorSize, double[] vectorComponents) {
+        if (vectorSize <= 0) {
             throw new IllegalArgumentException("Размерность вектора равна <= 0");
         }
 
-        this.array = new double[n];
-
-        for (int i = 0, k = array.length; i < k; i++) {
-            this.array[i] = array[i];
-        }
+        this.vectorComponents = Arrays.copyOf(vectorComponents, vectorSize);
     }
 
     public int getSize() {
-        return array.length;
+        return vectorComponents.length;
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(array);
+        StringBuilder vectorComponentsString = new StringBuilder("{" + vectorComponents[0]);
+
+        for (int i = 1; i < vectorComponents.length - 1; i++) {
+            vectorComponentsString.append(", ").append(vectorComponents[i]);
+        }
+
+        vectorComponentsString.append("}");
+
+        return vectorComponentsString.toString();
     }
 
-    public void vectorAddition(Vector vector) {
-        if (array.length < vector.array.length) {
-            Vector vector2 = new Vector(vector.array.length, array);
-            array = vector2.array;
+    public void add(Vector vector) {
+        if (vectorComponents.length < vector.vectorComponents.length) {
+            vectorComponents = Arrays.copyOf(vectorComponents, vector.vectorComponents.length);
         }
 
-        for (int i = 0; i < vector.array.length; i++) {
-            array[i] += vector.array[i];
-        }
-    }
-
-    public void vectorSubtraction(Vector vector) {
-        if (array.length < vector.array.length) {
-            Vector vector2 = new Vector(vector.array.length, array);
-            array = vector2.array;
-        }
-
-        for (int i = 0; i < vector.array.length; i++) {
-            array[i] -= vector.array[i];
+        for (int i = 0; i < vector.vectorComponents.length; i++) {
+            vectorComponents[i] += vector.vectorComponents[i];
         }
     }
 
-    public void vectorMultiplication(double scalar) {
-        for (int i = 0; i < array.length; i++) {
-            array[i] *= scalar;
+    public void subtract(Vector vector) {
+        if (vectorComponents.length < vector.vectorComponents.length) {
+            vectorComponents = Arrays.copyOf(vectorComponents, vector.vectorComponents.length);
+        }
+
+        for (int i = 0; i < vector.vectorComponents.length; i++) {
+            vectorComponents[i] -= vector.vectorComponents[i];
         }
     }
 
-    public void vectorReverse() {
-        for (int i = 0; i < array.length; i++) {
-            array[i] = array[i] * (-1);
+    public void multiply(double scalar) {
+        for (int i = 0; i < vectorComponents.length; i++) {
+            vectorComponents[i] *= scalar;
         }
+    }
+
+    public void unfold() {
+        multiply(-1);
     }
 
     public double getLength() {
-        double vectorSize = 0;
+        double vectorLength = 0;
 
-        for (int i = 0; i < array.length; i++) {
-            vectorSize += Math.pow(array[i], 2);
+        for (double vectorComponent : vectorComponents) {
+            vectorLength += vectorComponent * vectorComponent;
         }
 
-        return Math.sqrt(vectorSize);
+        return Math.sqrt(vectorLength);
     }
 
-    public double getComponentVectorIndex(int i) {
-        return array[i];
+    public double getComponent(int index) {
+        return vectorComponents[index];
     }
 
-    public void setComponentVectorIndex(double x, int i) {
-        array[i] = x;
+    public void setComponent(int index, double Component) {
+        vectorComponents[index] = Component;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 29;
-        int hash = 1;
-        hash = prime * hash + Arrays.hashCode(array);
-        return hash;
+        return Arrays.hashCode(vectorComponents);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-
-        if (o == null || o.getClass() != getClass()) {
-            return false;
-        }
-
         Vector v = (Vector) o;
 
-        if (v.array.length != array.length) {
-            return false;
-        }
-
-        for (int i = 0; i < array.length; i++) {
-            if (v.array[i] != array[i]) {
-                return false;
-            }
-        }
-
-        return true;
+        return Arrays.equals(this.vectorComponents, v.vectorComponents);
     }
 
-    public static Vector vectorAddition(Vector vector1, Vector vector2) {
-        int maxLengthVector = Math.max(vector1.array.length, vector2.array.length);
-        Vector newVector = new Vector(maxLengthVector);
+    public static Vector getSum(Vector vector1, Vector vector2) {
+        Vector resultantVector = new Vector(vector1);
+        resultantVector.add(vector2);
 
-        for (int i = 0; i < vector1.array.length; i++) {
-            newVector.array[i] = vector1.array[i];
-        }
-
-        for (int i = 0; i < vector2.array.length; i++) {
-            newVector.array[i] += vector2.array[i];
-        }
-
-        return newVector;
+        return resultantVector;
     }
 
-    public static Vector vectorSubtraction(Vector vector1, Vector vector2) {
-        int maxLengthVector = Math.max(vector1.array.length, vector2.array.length);
-        Vector newVector = new Vector(maxLengthVector);
+    public static Vector getDifference(Vector vector1, Vector vector2) {
+        Vector resultantVector = new Vector(vector1);
+        resultantVector.subtract(vector2);
 
-        for (int i = 0; i < vector1.array.length; i++) {
-            newVector.array[i] = vector1.array[i];
-        }
-
-        for (int i = 0; i < vector2.array.length; i++) {
-            newVector.array[i] -= vector2.array[i];
-        }
-
-        return newVector;
+        return resultantVector;
     }
 
-    public static double vectorsProductScalar(Vector vector1, Vector vector2) {
-        if (vector1.array.length != vector2.array.length) {
-            if (vector1.array.length < vector2.array.length) {
-                Vector vector = new Vector(vector2.array.length, vector1.array);
-                vector1.array = vector.array;
-            } else {
-                Vector vector = new Vector(vector1.array.length, vector2.array);
-                vector2.array = vector.array;
-            }
+    public static double getScalarProduct(Vector vector1, Vector vector2) {
+        double scalarProduct = 0;
+
+        for (int i = 0; i < Math.min(vector1.vectorComponents.length, vector2.vectorComponents.length); i++) {
+            scalarProduct += vector1.vectorComponents[i] * vector2.vectorComponents[i];
         }
 
-        double vectorsProductScalar = 0;
-
-        for (int i = 0; i < vector1.array.length; i++) {
-            vectorsProductScalar += vector1.array[i] * vector2.array[i];
-        }
-
-        return vectorsProductScalar;
+        return scalarProduct;
     }
 }

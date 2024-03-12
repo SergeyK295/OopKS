@@ -68,7 +68,7 @@ public class Matrix {
             double[] newArray = new double[maxLengthVector];
 
             for (int k = 0; k < vectors[i].getSize(); k++) {
-                newArray[k] = vectors[i].getComponentVectorIndex(k);
+                newArray[k] = vectors[i].getComponent(k);
             }
 
             for (int k = vectors[i].getSize(); k < maxLengthVector; k++) {
@@ -116,7 +116,7 @@ public class Matrix {
         Vector newVector = new Vector(matrix.length);
 
         for (int k = 0; k < matrix.length; k++) {
-            newVector.setComponentVectorIndex(matrix[k].getComponentVectorIndex(i), k);
+            newVector.setComponent(k, matrix[k].getComponent(i));
         }
 
         return newVector;
@@ -127,10 +127,9 @@ public class Matrix {
 
         for (int i = 0; i < matrix.length; i++) {
             for (int k = 0; k < matrix[i].getSize(); k++) {
-                newMatrix.getVectorIndex(k).setComponentVectorIndex(getVectorIndex(i).getComponentVectorIndex(k), i);
+                newMatrix.getVectorIndex(k).setComponent(i, getVectorIndex(i).getComponent(k));
             }
         }
-
 
         return newMatrix;
     }
@@ -138,7 +137,7 @@ public class Matrix {
     public void multiplicationByScalar(double scalar) {
         for (int i = 0; i < matrix.length; i++) {
             for (int k = 0; k < matrix[i].getSize(); k++) {
-                matrix[i].setComponentVectorIndex(getVectorIndex(i).getComponentVectorIndex(k) * scalar, k);
+                matrix[i].setComponent(k, getVectorIndex(i).getComponent(k) * scalar);
             }
         }
     }
@@ -150,8 +149,8 @@ public class Matrix {
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < vector.getSize(); j++) {
-                double component = matrix[i].getComponentVectorIndex(j) * vector.getComponentVectorIndex(j);
-                matrix[i].setComponentVectorIndex(component, j);
+                double component = matrix[i].getComponent(j) * vector.getComponent(j);
+                matrix[i].setComponent(j, component);
             }
         }
     }
@@ -163,8 +162,8 @@ public class Matrix {
 
         for (int i = 0; i < this.matrix.length; i++) {
             for (int j = 0; j < this.matrix[i].getSize(); j++) {
-                double component = this.matrix[i].getComponentVectorIndex(j) + matrix.matrix[i].getComponentVectorIndex(j);
-                this.matrix[i].setComponentVectorIndex(component, j);
+                double component = this.matrix[i].getComponent(j) + matrix.matrix[i].getComponent(j);
+                this.matrix[i].setComponent(j, component);
             }
         }
     }
@@ -176,22 +175,21 @@ public class Matrix {
 
         for (int i = 0; i < this.matrix.length; i++) {
             for (int j = 0; j < this.matrix[i].getSize(); j++) {
-                double component = this.matrix[i].getComponentVectorIndex(j) - matrix.matrix[i].getComponentVectorIndex(j);
-                this.matrix[i].setComponentVectorIndex(component, j);
+                double component = this.matrix[i].getComponent(j) - matrix.matrix[i].getComponent(j);
+                this.matrix[i].setComponent(j, component);
             }
         }
     }
 
-
     public double matrixDeterminant() {
-        Matrix matrixCopy=new Matrix(this);
+        Matrix matrixCopy = new Matrix(this);
 
         double matrixDeterminant = 1;
 
         for (int i = 0; i < matrixCopy.getMatrixSize()[0]; i++) {
-            if (matrixCopy.getVectorIndex(i).getComponentVectorIndex(i) == 0) {
+            if (matrixCopy.getVectorIndex(i).getComponent(i) == 0) {
                 for (int j = i; ; j++) {
-                    if (matrixCopy.getVectorIndex(j).getComponentVectorIndex(i) == 0) {
+                    if (matrixCopy.getVectorIndex(j).getComponent(i) == 0) {
                         continue;
                     }
 
@@ -207,20 +205,20 @@ public class Matrix {
             }
 
             Vector temp2 = new Vector(matrixCopy.getVectorIndex(i));
-            double scalar = matrixCopy.getVectorIndex(i).getComponentVectorIndex(i);
+            double scalar = matrixCopy.getVectorIndex(i).getComponent(i);
 
-            matrixCopy.getVectorIndex(i).vectorMultiplication(1 / scalar);
+            matrixCopy.getVectorIndex(i).multiply(1 / scalar);
 
             for (int k = i + 1; k < getMatrixSize()[0]; k++) {
-                if (matrixCopy.getVectorIndex(k).getComponentVectorIndex(i) == 0) {
+                if (matrixCopy.getVectorIndex(k).getComponent(i) == 0) {
                     continue;
                 }
 
-                scalar = matrixCopy.getVectorIndex(k).getComponentVectorIndex(i);
+                scalar = matrixCopy.getVectorIndex(k).getComponent(i);
 
                 Vector temp3 = new Vector(matrixCopy.getVectorIndex(i));
-                matrixCopy.getVectorIndex(i).vectorMultiplication(scalar);
-                matrixCopy.getVectorIndex(k).vectorSubtraction(matrixCopy.getVectorIndex(i));
+                matrixCopy.getVectorIndex(i).multiply(scalar);
+                matrixCopy.getVectorIndex(k).subtract(matrixCopy.getVectorIndex(i));
                 matrixCopy.setVectorStringIndex(temp3, i);
             }
 
@@ -228,7 +226,7 @@ public class Matrix {
         }
 
         for (int l = 0; l < matrixCopy.getMatrixSize()[0]; l++) {
-            matrixDeterminant *= matrixCopy.getVectorIndex(l).getComponentVectorIndex(l);
+            matrixDeterminant *= matrixCopy.getVectorIndex(l).getComponent(l);
         }
 
         return matrixDeterminant;
@@ -243,8 +241,8 @@ public class Matrix {
 
         for (int i = 0; i < matrix1.matrix.length; i++) {
             for (int j = 0; j < matrix1.matrix[i].getSize(); j++) {
-                double component = matrix1.matrix[i].getComponentVectorIndex(j) + matrix2.matrix[i].getComponentVectorIndex(j);
-                newMatrix.matrix[i].setComponentVectorIndex(component, j);
+                double component = matrix1.matrix[i].getComponent(j) + matrix2.matrix[i].getComponent(j);
+                newMatrix.matrix[i].setComponent(j, component);
             }
         }
 
@@ -260,8 +258,8 @@ public class Matrix {
 
         for (int i = 0; i < matrix1.matrix.length; i++) {
             for (int j = 0; j < matrix1.matrix[i].getSize(); j++) {
-                double component = matrix1.matrix[i].getComponentVectorIndex(j) - matrix2.matrix[i].getComponentVectorIndex(j);
-                newMatrix.matrix[i].setComponentVectorIndex(component, j);
+                double component = matrix1.matrix[i].getComponent(j) - matrix2.matrix[i].getComponent(j);
+                newMatrix.matrix[i].setComponent(j, component);
             }
         }
 
@@ -277,8 +275,8 @@ public class Matrix {
 
         for (int i = 0; i < matrix1.matrix.length; i++) {
             for (int j = 0; j < matrix1.matrix[i].getSize(); j++) {
-                double component = matrix1.matrix[i].getComponentVectorIndex(j) * matrix2.matrix[i].getComponentVectorIndex(j);
-                newMatrix.matrix[i].setComponentVectorIndex(component, j);
+                double component = matrix1.matrix[i].getComponent(j) * matrix2.matrix[i].getComponent(j);
+                newMatrix.matrix[i].setComponent(j, component);
             }
         }
 
