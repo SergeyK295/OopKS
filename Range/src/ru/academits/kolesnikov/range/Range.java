@@ -66,7 +66,7 @@ public class Range {
             return new Range[]{new Range(from, to)};
         }
 
-        return null;
+        return new Range[]{};
     }
 
     @Override

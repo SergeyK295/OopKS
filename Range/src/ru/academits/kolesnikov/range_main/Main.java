@@ -39,30 +39,35 @@ public class Main {
         if (intersection == null) {
             System.out.println("Нет пересечения");
         } else {
-            System.out.println("Результат пересечения:" + intersection);
+            System.out.println("Результат пересечения: " + intersection);
             System.out.println("Длина диапазона пресечения = " + intersection.getLength());
         }
 
         System.out.println();
 
-        Range[] arrayIntervalsCombined = range1.getUnion(range2);
+        Range[] amalgamation = range1.getUnion(range2);
 
-        if (arrayIntervalsCombined.length == 1) {
-            System.out.println("Объединенный диапазон: " + Arrays.toString(arrayIntervalsCombined));
-            System.out.println("Длина объединенного диапазона = " + arrayIntervalsCombined[0].getLength());
+        if (amalgamation.length == 1) {
+            System.out.println("Объединенный диапазон: " + Arrays.toString(amalgamation));
+            System.out.println("Длина объединенного диапазона = " + amalgamation[0].getLength());
         } else {
             System.out.println("Нет пересечения");
-            System.out.println("Диапазоны: " + Arrays.toString(arrayIntervalsCombined));
-            System.out.println("Длина первого диапазона = " + arrayIntervalsCombined[0].getLength());
-            System.out.println("Длина второго диапазона = " + arrayIntervalsCombined[1].getLength());
+            System.out.println("Диапазоны: " + Arrays.toString(amalgamation));
+            System.out.println("Длина первого диапазона = " + amalgamation[0].getLength());
+            System.out.println("Длина второго диапазона = " + amalgamation[1].getLength());
         }
 
         System.out.println();
 
         Range range11 = new Range(0, 5);
-        Range range12 = new Range(-3, 6);
+        Range range12 = new Range(-2, -1);
 
-        Range[] arrayIntervalsDifference = range11.getDifference(range12);
-        System.out.println(Arrays.toString(arrayIntervalsDifference));
+        Range[] difference = range11.getDifference(range12);  //2. Есть ошибки в вычислении разности - если диапазоны не пересекаются, разность не должна быть пустым диапазоном
+        System.out.println(Arrays.toString(difference));      // без пересечения диапазон не меняется
+
+        Range range13 = new Range(6, 7);
+
+        difference = range11.getDifference(range13);          //2. Есть ошибки в вычислении разности - если диапазоны не пересекаются, разность не должна быть пустым диапазоном
+        System.out.println(Arrays.toString(difference));      // без пересечения диапазон не меняется
     }
 }
