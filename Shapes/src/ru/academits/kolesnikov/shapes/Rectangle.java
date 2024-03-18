@@ -1,4 +1,4 @@
-package ru.academits.kolesnikov.shape;
+package ru.academits.kolesnikov.shapes;
 
 public class Rectangle implements Shape {
     private final double width;
@@ -31,11 +31,7 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        String lineSeparator = System.lineSeparator();
-        return "Фигура - прямоугольник" + lineSeparator + "Ширина = " + getWidth() + lineSeparator
-                + "Высота = " + getHeight() + lineSeparator
-                + "Площадь = " + getArea() + lineSeparator
-                + "Периметр = " + getPerimeter();
+        return "Фигура - прямоугольник. " + "Ширина = " + width + ", высота = " + height + ", площадь = " + getArea() + ", периметр = " + getPerimeter();
     }
 
     @Override

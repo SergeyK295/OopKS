@@ -1,4 +1,4 @@
-package ru.academits.kolesnikov.shape;
+package ru.academits.kolesnikov.shapes;
 
 public class Square implements Shape {
     private final double sideLength;
@@ -29,10 +29,7 @@ public class Square implements Shape {
 
     @Override
     public String toString() {
-        return "Фигура - квадрат" + System.lineSeparator()
-                + "Длина стороны = " + sideLength + System.lineSeparator()
-                + "Площадь = " + getArea() + System.lineSeparator()
-                + "Периметр = " + getPerimeter();
+        return "Фигура - квадрат. " + "Длина стороны = " + sideLength + ",  площадь = " + getArea() + ", периметр = " + getPerimeter();
     }
 
     @Override

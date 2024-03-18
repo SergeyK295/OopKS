@@ -1,4 +1,4 @@
-package ru.academits.kolesnikov.shape;
+package ru.academits.kolesnikov.shapes;
 
 public interface Shape {
     double getWidth();

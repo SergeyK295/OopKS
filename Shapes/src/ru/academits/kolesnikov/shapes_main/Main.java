@@ -1,8 +1,8 @@
-package ru.academits.kolesnikov.shape_main;
+package ru.academits.kolesnikov.shapes_main;
 
-import ru.academits.kolesnikov.shape_comparators.ShapeAreaComparator;
-import ru.academits.kolesnikov.shape_comparators.ShapePerimeterComparator;
-import ru.academits.kolesnikov.shape.*;
+import ru.academits.kolesnikov.shapes_comparators.ShapeAreaComparator;
+import ru.academits.kolesnikov.shapes_comparators.ShapePerimeterComparator;
+import ru.academits.kolesnikov.shapes.*;
 
 import java.util.*;
 
@@ -24,7 +24,7 @@ public class Main {
 
         System.out.println();
 
-        Arrays.sort(shapes,   new ShapePerimeterComparator());
+        Arrays.sort(shapes, new ShapePerimeterComparator());
         System.out.println("Информация о фигуре со вторым по величине периметром:");
         System.out.println(shapes[shapes.length - 2]);
     }

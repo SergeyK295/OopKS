@@ -1,4 +1,4 @@
-package ru.academits.kolesnikov.shape;
+package ru.academits.kolesnikov.shapes;
 
 public class Circle implements Shape {
     private final double radius;
@@ -33,10 +33,7 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return "Фигура - круг" + System.lineSeparator()
-                + "Радиус = " + radius + System.lineSeparator()
-                + "Площадь = " + getArea() + System.lineSeparator()
-                + "Периметр = " + getPerimeter();
+        return "Фигура - круг. " + "Радиус = " + radius + ", площадь = " + getArea() + ", периметр = " + getPerimeter();
     }
 
     @Override

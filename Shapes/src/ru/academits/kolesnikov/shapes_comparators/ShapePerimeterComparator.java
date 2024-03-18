@@ -1,6 +1,6 @@
-package ru.academits.kolesnikov.shape_comparators;
+package ru.academits.kolesnikov.shapes_comparators;
 
-import ru.academits.kolesnikov.shape.Shape;
+import ru.academits.kolesnikov.shapes.Shape;
 
 import java.util.Comparator;
 
