@@ -31,7 +31,7 @@ public class Main {
         vector4.multiply(scalar);
         System.out.println("Вектор №4 после умножение компонентов на " + scalar + ": " + vector4 + System.lineSeparator());
 
-        vector4.vectorReverse();
+        vector4.reverse();
         System.out.println("Вектор №4 после разворота: " + vector4 + System.lineSeparator());
 
         System.out.println("Длина вектора №1: " + vector1.getLength() + System.lineSeparator());
