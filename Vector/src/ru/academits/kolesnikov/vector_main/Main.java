@@ -8,18 +8,18 @@ public class Main {
         Vector vector1 = new Vector(array);
         System.out.println("Вектор №1: " + vector1);
 
-        int vectorSize = 3;
-        Vector vector2 = new Vector(vectorSize, array);
+        int size = 3;
+        Vector vector2 = new Vector(size, array);
         System.out.println("Вектор №2: " + vector2);
 
-        Vector vector3 = new Vector(vectorSize);
+        Vector vector3 = new Vector(size);
         System.out.println("Вектор №3 (пустой вектор): " + vector3 + System.lineSeparator());
 
-        int size = vector2.getSize();
+        size = vector2.getSize();
         System.out.println("Размерность вектора №2: " + size + System.lineSeparator());
 
         vector1.add(vector2);
-        System.out.println("Вектор №1 после прибавления вектора №2: " + vector1 + size + System.lineSeparator());
+        System.out.println("Вектор №1 после прибавления вектора №2: " + vector1 + System.lineSeparator());
 
         Vector vector4 = new Vector(vector1);
         System.out.println("Вектор №4 (копия вектора №1): " + vector4 + System.lineSeparator());
@@ -31,7 +31,7 @@ public class Main {
         vector4.multiply(scalar);
         System.out.println("Вектор №4 после умножение компонентов на " + scalar + ": " + vector4 + System.lineSeparator());
 
-        vector4.unfold();
+        vector4.vectorReverse();
         System.out.println("Вектор №4 после разворота: " + vector4 + System.lineSeparator());
 
         System.out.println("Длина вектора №1: " + vector1.getLength() + System.lineSeparator());
