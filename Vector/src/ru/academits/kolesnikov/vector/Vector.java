@@ -41,14 +41,12 @@ public class Vector {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("{");
         stringBuilder.append(components[0]);
-        char comma = ',';
 
         for (int i = 1; i < components.length; i++) {
-            stringBuilder.append(comma).append(components[i]);
+            stringBuilder.append(", ").append(components[i]);
         }
-
-        char bracketsClose = '}';
-        stringBuilder.append(bracketsClose);
+        
+        stringBuilder.append('}');
 
         return stringBuilder.toString();
     }
