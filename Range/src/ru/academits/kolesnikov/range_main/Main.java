@@ -45,29 +45,21 @@ public class Main {
 
         System.out.println();
 
-        Range[] amalgamation = range1.getUnion(range2);
+        Range[] union = range1.getUnion(range2);
 
-        if (amalgamation.length == 1) {
-            System.out.println("Объединенный диапазон: " + Arrays.toString(amalgamation));
-            System.out.println("Длина объединенного диапазона = " + amalgamation[0].getLength());
+        if (union.length == 1) {
+            System.out.println("Объединенный диапазон: " + Arrays.toString(union));
+            System.out.println("Длина объединенного диапазона = " + union[0].getLength());
         } else {
             System.out.println("Нет пересечения");
-            System.out.println("Диапазоны: " + Arrays.toString(amalgamation));
-            System.out.println("Длина первого диапазона = " + amalgamation[0].getLength());
-            System.out.println("Длина второго диапазона = " + amalgamation[1].getLength());
+            System.out.println("Диапазоны: " + Arrays.toString(union));
+            System.out.println("Длина первого диапазона = " + union[0].getLength());
+            System.out.println("Длина второго диапазона = " + union[1].getLength());
         }
 
         System.out.println();
 
-        Range range11 = new Range(0, 5);
-        Range range12 = new Range(-2, -1);
-
-        Range[] difference = range11.getDifference(range12);  //2. Есть ошибки в вычислении разности - если диапазоны не пересекаются, разность не должна быть пустым диапазоном
-        System.out.println(Arrays.toString(difference));      // без пересечения диапазон не меняется
-
-        Range range13 = new Range(6, 7);
-
-        difference = range11.getDifference(range13);          //2. Есть ошибки в вычислении разности - если диапазоны не пересекаются, разность не должна быть пустым диапазоном
-        System.out.println(Arrays.toString(difference));      // без пересечения диапазон не меняется
+        Range[] difference = range1.getDifference(range2);
+        System.out.println("Результат разности двух интервалов: " + Arrays.toString(difference));
     }
 }

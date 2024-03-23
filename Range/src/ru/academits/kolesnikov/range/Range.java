@@ -62,7 +62,7 @@ public class Range {
             return new Range[]{new Range(range.to, to)};
         }
 
-        if (range.to < from || range.from > to) {
+        if (range.to <= from || range.from >= to) {
             return new Range[]{new Range(from, to)};
         }
 
