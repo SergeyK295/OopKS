@@ -15,7 +15,7 @@ public class Main {
                 new Rectangle(5, 10),
                 new Circle(5),
                 new Circle(1),
-                new Triangle(1, 1, 10, 1, 10, 1)
+                new Triangle(1, 1, 10, 1, 10, 0)
         };
 
         Arrays.sort(shapes, new ShapeAreaComparator());

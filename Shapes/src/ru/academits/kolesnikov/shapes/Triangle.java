@@ -57,33 +57,28 @@ public class Triangle implements Shape {
         return getMaxDistanceBetweenNumbers(y1, y2, y3);
     }
 
-    private double[] getSideLength() {
-        double side1Length = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-        double side2Length = Math.sqrt(Math.pow(x2 - x3, 2) + Math.pow(y2 - y3, 2));
-        double side3Length = Math.sqrt(Math.pow(x3 - x1, 2) + Math.pow(y3 - y1, 2));
-
-        return new double[]{side1Length, side2Length, side3Length};
+    private double getSideLength(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
     @Override
     public double getArea() {
-        double[] sideLength = getSideLength();
+        double length1 = getSideLength(x1, y1, x2, y2);
+        double length2 = getSideLength(x2, y2, x3, y3);
+        double length3 = getSideLength(x3, y3, x1, y1);
 
-        double triangleSemiPerimeter = (getPerimeter()) / 2;
-        return Math.sqrt(triangleSemiPerimeter * (triangleSemiPerimeter - sideLength[1]) *
-                (triangleSemiPerimeter - sideLength[2]) * (triangleSemiPerimeter - sideLength[3]));
+        double triangleSemiPerimeter = length1 + length2 + length3 / 2;
+        return Math.sqrt(triangleSemiPerimeter * (triangleSemiPerimeter - length1) * (triangleSemiPerimeter - length2) * (triangleSemiPerimeter - length3));
     }
 
     @Override
     public double getPerimeter() {
-        double[] sideLength = getSideLength();
-        return sideLength[1] + sideLength[2] + sideLength[3];
+        return getSideLength(x1, y1, x2, y2) + getSideLength(x2, y2, x3, y3) + getSideLength(x3, y3, x1, y1);
     }
 
     @Override
     public String toString() {
-        String vertexesCoordinates = "(" + x1 + "; " + y1 + "), (" + x2 + "; " + y2 + "), (" + x3 + "; " + y3 + ")";
-        return "Фигура - треугольник. " + "Координаты вершин: " + vertexesCoordinates + ", площадь = " + getArea() + ", периметр = " + getPerimeter();
+        return "Треугольник: координаты вершин (" + x1 + "; " + y1 + "), (" + x2 + "; " + y2 + "), (" + x3 + "; " + y3 + "), площадь = " + getArea() + ", периметр = " + getPerimeter();
     }
 
     @Override
