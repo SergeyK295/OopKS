@@ -3,10 +3,6 @@ package ru.academits.kolesnikov.matrix_main;
 import ru.academits.kolesnikov.matrix.Matrix;
 import ru.academits.kolesnikov.vector.Vector;
 
-import static ru.academits.kolesnikov.matrix.Matrix.addMatrix;
-import static ru.academits.kolesnikov.matrix.Matrix.subtractMatrix;
-import static ru.academits.kolesnikov.matrix.Matrix.multiplyByMatrix;
-
 public class Main {
     public static void main(String[] args) {
         Matrix matrix1 = new Matrix(3, 2);
@@ -30,7 +26,7 @@ public class Main {
         System.out.println();
 
         System.out.println("Матрица №3:");
-        System.out.println("количество строк " + matrix3.getRowCount() + " количество столбцов " + matrix3.getColumnCount());
+        System.out.println("количество строк " + matrix3.getRowsCount() + " количество столбцов " + matrix3.getColumnsCount());
         System.out.println("строка №2 " + matrix3.getRow(1) + " столбик №2 " + matrix3.getColumn(1));
 
         System.out.println();
@@ -41,19 +37,19 @@ public class Main {
         matrix4.multiplyByVector(vector1);
         System.out.println("Матрица №4 умноженная на вектор {5, 7, 9}\n" + matrix4);
 
-        Matrix matrix5 = addMatrix(matrix2, matrix2);
+        Matrix matrix5 = Matrix.getSum(matrix2, matrix2);
         System.out.println("Матрица №5: к матрица №2 прибавили матрицу №2\n" + matrix5);
 
-        Matrix matrix6 = subtractMatrix(matrix5, matrix2);
+        Matrix matrix6 = Matrix.getDifference(matrix5, matrix2);
         System.out.println("Матрица №6: от матрица №5 вычли матрицу №2\n" + matrix6);
 
-        Matrix matrix7 = multiplyByMatrix(matrix3, matrix3);
+        Matrix matrix7 = Matrix.getProduct(matrix3, matrix3);
         System.out.println("Матрица №7: умножение матрицы №3 на матрицу №3\n" + matrix7);
 
         System.out.println();
 
-        double[][] array = {{3, 2, 4, 5}, {4, -3, 2, -4}, {5, -2, -3, -7}, {-3, 4, 2, 9}};
-        Matrix matrix8 = new Matrix(array);
+        double[][] array4 = {{3, 2, 4, 5}, {4, -3, 2, -4}, {5, -2, -3, -7}, {-3, 4, 2, 9}};
+        Matrix matrix8 = new Matrix(array4);
         System.out.println("Матрица №8:\n" + matrix8);
         System.out.println("Определитель матрицы №8:\n" + matrix8.getDeterminant());
     }
