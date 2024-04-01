@@ -57,18 +57,18 @@ public class Triangle implements Shape {
         return getMaxDistanceBetweenNumbers(y1, y2, y3);
     }
 
-    private double getSideLength(double x1, double y1, double x2, double y2) {
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
     @Override
     public double getArea() {
-        double length1 = getSideLength(x1, y1, x2, y2);
-        double length2 = getSideLength(x2, y2, x3, y3);
-        double length3 = getSideLength(x3, y3, x1, y1);
+        double sideLength1 = getSideLength(x1, y1, x2, y2);
+        double sideLength2 = getSideLength(x2, y2, x3, y3);
+        double sideLength3 = getSideLength(x3, y3, x1, y1);
 
-        double triangleSemiPerimeter = length1 + length2 + length3 / 2;
-        return Math.sqrt(triangleSemiPerimeter * (triangleSemiPerimeter - length1) * (triangleSemiPerimeter - length2) * (triangleSemiPerimeter - length3));
+        double triangleSemiPerimeter = (sideLength1 + sideLength2 + sideLength3) / 2;
+        return Math.sqrt(triangleSemiPerimeter * (triangleSemiPerimeter - sideLength1) * (triangleSemiPerimeter - sideLength2) * (triangleSemiPerimeter - sideLength3));
     }
 
     @Override
