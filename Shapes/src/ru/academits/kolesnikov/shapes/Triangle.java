@@ -63,12 +63,12 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        double sideLength1 = getSideLength(x1, y1, x2, y2);
-        double sideLength2 = getSideLength(x2, y2, x3, y3);
-        double sideLength3 = getSideLength(x3, y3, x1, y1);
+        double side1Length = getSideLength(x1, y1, x2, y2);
+        double side2Length = getSideLength(x2, y2, x3, y3);
+        double side3Length = getSideLength(x3, y3, x1, y1);
 
-        double triangleSemiPerimeter = (sideLength1 + sideLength2 + sideLength3) / 2;
-        return Math.sqrt(triangleSemiPerimeter * (triangleSemiPerimeter - sideLength1) * (triangleSemiPerimeter - sideLength2) * (triangleSemiPerimeter - sideLength3));
+        double triangleSemiPerimeter = (side1Length + side2Length + side3Length) / 2;
+        return Math.sqrt(triangleSemiPerimeter * (triangleSemiPerimeter - side1Length) * (triangleSemiPerimeter - side2Length) * (triangleSemiPerimeter - side3Length));
     }
 
     @Override
