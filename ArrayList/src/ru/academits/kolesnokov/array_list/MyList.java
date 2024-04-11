@@ -13,6 +13,11 @@ public class MyList<T> implements List {
         items = new Object[capacity];
     }
 
+    public MyList() {
+        capacity = 10;
+        items = new Object[capacity];
+    }
+
     @Override
     public int size() {
         return size;
