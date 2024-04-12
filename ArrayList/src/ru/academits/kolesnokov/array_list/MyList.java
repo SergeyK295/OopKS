@@ -3,7 +3,7 @@ package ru.academits.kolesnokov.array_list;
 import java.util.*;
 import java.util.List;
 
-public class MyList<T> implements List {
+public class MyList<T> implements List <T>{
     private int capacity;
     private Object[] items;
     private int size;
@@ -175,9 +175,9 @@ public class MyList<T> implements List {
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         checkIndex(index);
-        return items[index];
+        return (T) items[index];
     }
 
     @Override
@@ -204,13 +204,13 @@ public class MyList<T> implements List {
     }
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         checkIndex(index);
 
         if (index < size) {
             Object result = items[index];
             fastRemove(index);
-            return result;
+            return (T) result;
         }
 
         return null;
