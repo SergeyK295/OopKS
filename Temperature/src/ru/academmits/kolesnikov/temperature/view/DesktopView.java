@@ -57,7 +57,7 @@ public class DesktopView implements View, ItemListener {
             });
 
             JPanel tab1 = new JPanel();
-            tab1.add(new JLabel("в градус"));
+            tab1.add(new JLabel("в градусы"));
             tab1.add(convertCelsiusToKelvin);
             tab1.add(convertCelsiusToFahrenheit);
 
@@ -82,7 +82,7 @@ public class DesktopView implements View, ItemListener {
             });
 
             JPanel tab2 = new JPanel();
-            tab2.add(new JLabel("в градус"));
+            tab2.add(new JLabel("в градусы"));
             tab2.add(convertFahrenheitToKelvin);
             tab2.add(convertFahrenheitToCelsius);
 
@@ -107,14 +107,14 @@ public class DesktopView implements View, ItemListener {
             });
 
             JPanel tab3 = new JPanel();
-            tab3.add(new JLabel("в градус"));
+            tab3.add(new JLabel("в градусы"));
             tab3.add(convertKelvinToFahrenheit);
             tab3.add(convertKelvinToCelsius);
 
             tabs = new JPanel(new CardLayout());
-            tabs.add(tab1);
-            tabs.add(tab2);
-            tabs.add(tab3);
+            tabs.add(tab1, "Цельсия");
+            tabs.add(tab2, "Фаренгейта");
+            tabs.add(tab3, "Кельвина");
 
             resultLabel = new JLabel();
             JPanel resultPanel = new JPanel();
