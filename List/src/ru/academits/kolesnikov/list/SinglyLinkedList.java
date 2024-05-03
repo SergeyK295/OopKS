@@ -32,7 +32,7 @@ public class SinglyLinkedList<E> {
 
     public E deleteByIndex(int index) {
         if (index < 0 || index > size) {
-            System.out.println("Нет индекса со значением " + index + ". Допустимое значение от 0 до " + size + " включительно.");
+            throw new IndexOutOfBoundsException("Нет индекса со значением " + index + ". Допустимое значение от 0 до " + size + " включительно.");
         }
 
         if (index == 0) {
@@ -135,7 +135,7 @@ public class SinglyLinkedList<E> {
 
     private ListItem<E> getItem(int index) {
         if (index < 0 || index > size) {
-            System.out.println("Нет индекса со значением " + index + ". Допустимое значение от 0 до " + size + " включительно.");
+            throw new IndexOutOfBoundsException("Нет индекса со значением " + index + ". Допустимое значение от 0 до " + size + " включительно.");
         }
 
         ListItem<E> item = head;
