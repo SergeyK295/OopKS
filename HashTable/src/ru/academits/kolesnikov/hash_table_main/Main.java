@@ -1,8 +1,8 @@
-package ru.academits.kolesnikov.hash_table;
+package ru.academits.kolesnikov.hash_table_main;
+
+import ru.academits.kolesnikov.hash_table.HashTable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,8 +24,6 @@ public class Main {
 
         hashTable.addAll(arrayList);
 
-        for (Iterator<Integer> i = hashTable.iterator(); i.hasNext(); ) {
-            System.out.println(i.next());
-        }
+        System.out.println("Добавим в хэш таблицу список и распечатаем его" + hashTable);
     }
 }
