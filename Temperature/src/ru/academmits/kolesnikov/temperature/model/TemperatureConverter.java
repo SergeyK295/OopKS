@@ -1,7 +1,6 @@
 package ru.academmits.kolesnikov.temperature.model;
 
 public class TemperatureConverter implements Converter {
-
     @Override
     public double convertCelsiusToKelvin(double temperature) {
         return temperature + 273.15;
@@ -17,6 +16,7 @@ public class TemperatureConverter implements Converter {
         return (temperature + 459.67) / 1.8;
     }
 
+    @Override
     public double convertFahrenheitToCelsius(double temperature) {
         return (temperature - 32) / 1.8;
     }

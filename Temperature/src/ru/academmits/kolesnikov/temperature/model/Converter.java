@@ -1,15 +1,17 @@
 package ru.academmits.kolesnikov.temperature.model;
 
 public interface Converter {
-    double convertCelsiusToKelvin(double celsiusTemperature);
+    double convertCelsiusToKelvin(double temperature);
 
-    double convertCelsiusToFahrenheit(double celsiusTemperature);
+    double convertCelsiusToFahrenheit(double temperature);
 
-    double convertFahrenheitToKelvin(double celsiusTemperature);
+    double convertFahrenheitToKelvin(double temperature);
 
-    double convertFahrenheitToCelsius(double celsiusTemperature);
+    double convertFahrenheitToCelsius(double temperature);
 
-    double convertKelvinToFahrenheit(double celsiusTemperature);
+    double convertKelvinToFahrenheit(double temperature);
 
-    double convertKelvinToCelsius(double celsiusTemperature);
+    double convertKelvinToCelsius(double temperature);
+
+
 }

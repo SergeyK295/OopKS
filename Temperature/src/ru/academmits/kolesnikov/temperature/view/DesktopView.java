@@ -10,10 +10,13 @@ import java.awt.event.ItemListener;
 public class DesktopView implements View, ItemListener {
     private Controller controller;
     private JLabel resultLabel;
-    private static JPanel tabs;
+    private static JPanel startPanel;
+    String[] scales = new String[2];
 
     @Override
     public void start() {
+        String[] temperatureScale = new String[]{"Кельвина", "Фаренгейта", "Цельсия"};
+
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -21,100 +24,47 @@ public class DesktopView implements View, ItemListener {
             }
 
             JFrame frame = new JFrame("Конвертер температур");
-            frame.setSize(450, 150);
             frame.setLocationRelativeTo(null);
+            frame.setMinimumSize(new Dimension(700, 200));
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-            JComboBox<String> comboBox = new JComboBox<>(new String[]{"Цельсия", "Кельвина", "Фаренгейта"});
+            startPanel = new JPanel();
+            startPanel.add(new JLabel("Конвертировать температуру из градусов"));
+
+            JComboBox<String> comboBox = new JComboBox<>(temperatureScale);
             comboBox.setEditable(false);
-            comboBox.addItemListener(this);
+            scales[0] = temperatureScale[0];
+            comboBox.addActionListener(e -> {
+                scales[0] = (String) comboBox.getSelectedItem();
+            });
+            startPanel.add(comboBox);
 
             JTextField temperatureField = new JTextField(10);
-
-            JPanel startPanel = new JPanel();
-            startPanel.add(new JLabel("Конвертировать температуру из градусов"));
-            startPanel.add(comboBox);
             startPanel.add(temperatureField);
 
-            JButton convertCelsiusToKelvin = new JButton("Кельвина");
-            convertCelsiusToKelvin.addActionListener(e -> {
+            JPanel centerPanel = new JPanel();
+            centerPanel.add(new JLabel("в градусы"));
+
+            JComboBox<String> comboBox2 = new JComboBox<>(temperatureScale);
+            comboBox2.setEditable(false);
+            scales[1] = temperatureScale[0];
+            comboBox2.addActionListener(e -> {
+                scales[1] = (String) comboBox2.getSelectedItem();
+            });
+
+            centerPanel.add(comboBox2);
+
+            JButton startButton = new JButton("Старт");
+            startButton.addActionListener(e -> {
                 try {
-                    double celsiusTemperature = Double.parseDouble(temperatureField.getText());
-                    controller.convertCelsiusToKelvin(celsiusTemperature);
+                    double temperature = Double.parseDouble(temperatureField.getText());
+                    controller.convert(scales, temperature);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(frame, "Температура должна быть числом", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 }
             });
 
-            JButton convertCelsiusToFahrenheit = new JButton("Фаренгейта");
-            convertCelsiusToFahrenheit.addActionListener(e -> {
-                try {
-                    double celsiusTemperature = Double.parseDouble(temperatureField.getText());
-                    controller.convertCelsiusToFahrenheit(celsiusTemperature);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Температура должна быть числом", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-
-            JPanel tab1 = new JPanel();
-            tab1.add(new JLabel("в градусы"));
-            tab1.add(convertCelsiusToKelvin);
-            tab1.add(convertCelsiusToFahrenheit);
-
-            JButton convertFahrenheitToKelvin = new JButton("Кельвина");
-            convertFahrenheitToKelvin.addActionListener(e -> {
-                try {
-                    double celsiusTemperature = Double.parseDouble(temperatureField.getText());
-                    controller.convertFahrenheitToKelvin(celsiusTemperature);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Температура должна быть числом", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-
-            JButton convertFahrenheitToCelsius = new JButton("Цельсии");
-            convertFahrenheitToCelsius.addActionListener(e -> {
-                try {
-                    double celsiusTemperature = Double.parseDouble(temperatureField.getText());
-                    controller.convertFahrenheitToCelsius(celsiusTemperature);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Температура должна быть числом", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-
-            JPanel tab2 = new JPanel();
-            tab2.add(new JLabel("в градусы"));
-            tab2.add(convertFahrenheitToKelvin);
-            tab2.add(convertFahrenheitToCelsius);
-
-            JButton convertKelvinToFahrenheit = new JButton("Фаренгейта");
-            convertKelvinToFahrenheit.addActionListener(e -> {
-                try {
-                    double celsiusTemperature = Double.parseDouble(temperatureField.getText());
-                    controller.convertKelvinToFahrenheit(celsiusTemperature);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Температура должна быть числом", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-
-            JButton convertKelvinToCelsius = new JButton("Цельсии");
-            convertKelvinToCelsius.addActionListener(e -> {
-                try {
-                    double celsiusTemperature = Double.parseDouble(temperatureField.getText());
-                    controller.convertKelvinToCelsius(celsiusTemperature);
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(frame, "Температура должна быть числом", "Ошибка", JOptionPane.ERROR_MESSAGE);
-                }
-            });
-
-            JPanel tab3 = new JPanel();
-            tab3.add(new JLabel("в градусы"));
-            tab3.add(convertKelvinToFahrenheit);
-            tab3.add(convertKelvinToCelsius);
-
-            tabs = new JPanel(new CardLayout());
-            tabs.add(tab1, "Цельсия");
-            tabs.add(tab2, "Фаренгейта");
-            tabs.add(tab3, "Кельвина");
+            centerPanel.add(startButton);
 
             resultLabel = new JLabel();
             JPanel resultPanel = new JPanel();
@@ -122,7 +72,7 @@ public class DesktopView implements View, ItemListener {
 
             Container container = frame.getContentPane();
             container.add(startPanel, BorderLayout.PAGE_START);
-            container.add(tabs, BorderLayout.CENTER);
+            container.add(centerPanel, BorderLayout.CENTER);
             container.add(resultPanel, BorderLayout.PAGE_END);
 
             frame.setVisible(true);
@@ -135,23 +85,13 @@ public class DesktopView implements View, ItemListener {
     }
 
     @Override
-    public void showKelvinTemperature(double temperature) {
-        resultLabel.setText("Температура в градусах Кельвина = " + temperature);
-    }
-
-    @Override
-    public void showFahrenheitTemperature(double temperature) {
-        resultLabel.setText("Температура в градусах Фаренгейта = " + temperature);
-    }
-
-    @Override
-    public void showCelsiusTemperature(double temperature) {
-        resultLabel.setText("Температура в градусах Цельсия = " + temperature);
+    public void showTemperature(String scales, double temperature) {
+        resultLabel.setText("Температура в градусах " + scales + " = " + temperature);
     }
 
     @Override
     public void itemStateChanged(ItemEvent event) {
-        CardLayout layout = (CardLayout) (tabs.getLayout());
-        layout.show(tabs, (String) event.getItem());
+        CardLayout layout = (CardLayout) (startPanel.getLayout());
+        layout.show(startPanel, (String) event.getItem());
     }
 }
