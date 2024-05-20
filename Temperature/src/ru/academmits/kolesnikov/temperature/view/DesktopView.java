@@ -34,9 +34,9 @@ public class DesktopView implements View, ItemListener {
             JComboBox<String> comboBox = new JComboBox<>(temperatureScale);
             comboBox.setEditable(false);
             scales[0] = temperatureScale[0];
-            comboBox.addActionListener(e -> {
-                scales[0] = (String) comboBox.getSelectedItem();
-            });
+            comboBox.addActionListener(e ->
+                    scales[0] = (String) comboBox.getSelectedItem()
+            );
             startPanel.add(comboBox);
 
             JTextField temperatureField = new JTextField(10);
@@ -48,9 +48,9 @@ public class DesktopView implements View, ItemListener {
             JComboBox<String> comboBox2 = new JComboBox<>(temperatureScale);
             comboBox2.setEditable(false);
             scales[1] = temperatureScale[0];
-            comboBox2.addActionListener(e -> {
-                scales[1] = (String) comboBox2.getSelectedItem();
-            });
+            comboBox2.addActionListener(e ->
+                    scales[1] = (String) comboBox2.getSelectedItem()
+            );
 
             centerPanel.add(comboBox2);
 
