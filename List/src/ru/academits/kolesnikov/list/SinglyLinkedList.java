@@ -65,20 +65,8 @@ public class SinglyLinkedList<E> {
 
         int index = 0;
 
-        if (data == null) {
-            for (ListItem<E> previousItem = head; index < size; previousItem = previousItem.getNext()) {
-                if (previousItem.getNext().getData() == null) {
-                    previousItem.setNext(previousItem.getNext().getNext());
-                    size--;
-                    return true;
-                }
-
-                index++;
-            }
-        }
-
         for (ListItem<E> previousItem = head; index < size; previousItem = previousItem.getNext()) {
-            if (previousItem.getNext().getData() != null && previousItem.getNext().getData().equals(data)) {
+            if ((data == null && previousItem.getNext().getData() == null) || (previousItem.getNext().getData() != null && previousItem.getNext().getData().equals(data))) {
                 previousItem.setNext(previousItem.getNext().getNext());
                 size--;
                 return true;

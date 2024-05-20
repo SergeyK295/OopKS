@@ -53,5 +53,6 @@ public class Main {
         System.out.println("Вектор №6 (разность векторов №2 и №3): " + vector6 + System.lineSeparator());
 
         System.out.println("Скалярное произведение векторов №2 и №6: " + Vector.getScalarProduct(vector2, vector6));
+
     }
 }
