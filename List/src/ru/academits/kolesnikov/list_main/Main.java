@@ -1,10 +1,10 @@
 package ru.academits.kolesnikov.list_main;
 
-import ru.academits.kolesnikov.list.SinglyLinkedList;
+import ru.academits.kolesnikov.list.SinglyLinked;
 
 public class Main {
     public static void main(String[] args) {
-        SinglyLinkedList<Integer> list1 = new SinglyLinkedList<>();
+        SinglyLinked<Integer> list1 = new SinglyLinked<>();
 
         list1.addFirst(0);
 
@@ -15,8 +15,8 @@ public class Main {
         list1.add(list1.size(), null);
         list1.add(list1.size(), 11);
 
-        SinglyLinkedList<Integer> list2 = list1.copyList();
-        System.out.println("Копия писка №1");
+        SinglyLinked<Integer> list2 = list1.copy();
+        System.out.println("Копия списка №1");
         System.out.println(list2);
 
         int delete = 4;
