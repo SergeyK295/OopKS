@@ -2,22 +2,24 @@ package ru.academits.kolesnokov.array_list;
 
 import java.util.*;
 
-public class List<E> implements java.util.List<E> {
+public class ArrayList<E> implements java.util.List<E> {
     private E[] items;
     private int size;
+    private final int capacity = 10;
+    private int modCount;
 
-    public List(int capacity) {
-        if (capacity < 1) {
-            throw new IndexOutOfBoundsException("Передано не допустимое значение \"" + capacity + "\" вместимость списка должна быть больше 0");
+    public ArrayList(int capacity) {
+        if (capacity < 0) {
+            throw new IndexOutOfBoundsException("Передано не допустимое значение \"" + capacity + "\" вместимость списка должна быть не меньше 0");
         }
 
         //noinspection unchecked
         items = (E[]) new Object[capacity];
     }
 
-    public List() {
+    public ArrayList() {
         //noinspection unchecked
-        items = (E[]) new Object[10];
+        items = (E[]) new Object[capacity];
     }
 
     @Override
@@ -37,8 +39,7 @@ public class List<E> implements java.util.List<E> {
 
     private class ListIterator implements Iterator<E> {
         private int currentIndex = -1;
-
-        private final int modCount = Arrays.hashCode(items);
+        private final int modCount = ArrayList.this.modCount;
 
         @Override
         public boolean hasNext() {
@@ -51,7 +52,7 @@ public class List<E> implements java.util.List<E> {
                 throw new NoSuchElementException("Коллекция закончилась");
             }
 
-            if (modCount != Arrays.hashCode(items)) {
+            if (modCount != ArrayList.this.modCount) {
                 throw new ConcurrentModificationException("Коллекция изменилась за время обхода");
             }
 
@@ -70,14 +71,14 @@ public class List<E> implements java.util.List<E> {
         return Arrays.copyOf(items, size);
     }
 
-    public <E> E[] toArray(E[] array) {
+    public <T> T[] toArray(T[] array) {
         if (array.length < size) {
-            return (E[]) toArray();
+            //noinspection unchecked
+            return (T[]) Arrays.copyOf(items, size, array.getClass());
         }
 
-        for (int i = 0; i < size; i++) {
-            array[i] = (E) items[i];
-        }
+        //noinspection SuspiciousSystemArraycopy
+        System.arraycopy(items, 0, array, 0, size);
 
         if (array.length > size) {
             array[size] = null;
@@ -86,97 +87,116 @@ public class List<E> implements java.util.List<E> {
         return array;
     }
 
-    public void ensureCapacity(int capacity) {
-        while (capacity + size >= items.length) {
-            items = Arrays.copyOf(items, items.length * 2);
+    public void ensureCapacity(int minCapacity) {
+        if (minCapacity > items.length) {
+            items = Arrays.copyOf(items, (minCapacity + items.length) * 2);
         }
-
     }
 
     public void trimToSize() {
-        items = Arrays.copyOf(items, size);
+        if (size / 2 < items.length) {
+            items = Arrays.copyOf(items, size);
+        }
     }
 
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Индекс " + index + " некорректный. Допустимый диапазон от 0 до " + size);
+            throw new IndexOutOfBoundsException("Индекс " + index + " некорректный. Допустимый диапазон от 0 до " + (size - 1) + " включительно");
+        }
+    }
+
+    private void checkPreviousIndex(int index) {
+        if (index < 0 || index - 1 >= size) {
+            throw new IndexOutOfBoundsException("Индекс " + (index - 1) + " некорректный. Допустимый диапазон от 0 до " + (size - 2) + " включительно");
         }
     }
 
     @Override
-    public boolean add(E o) {
-        add(size, o);
+    public boolean add(E item) {
+        add(size, item);
         return true;
     }
 
     @Override
-    public void add(int index, Object item) {
-        if (index != 0) {
-            checkIndex(index - 1);
+    public void add(int index, E item) {
+        checkPreviousIndex(index);
+
+        if (size == items.length) {
+            items = Arrays.copyOf(items, items.length * 2);
         }
 
-        ensureCapacity(1);
-        System.arraycopy(this.items, index, this.items, index + 1, size - index);
+        System.arraycopy(items, index, items, index + 1, size - index);
+        items[index] = item;
 
-        //noinspection unchecked
-        this.items[index] = (E) item;
         size++;
+        modCount++;
     }
 
     @Override
     public boolean remove(Object o) {
-        remove(indexOf(o));
-        return false;
+        int index = indexOf(o);
+
+        if (index == -1) {
+            return false;
+        }
+
+        remove(index);
+        return true;
     }
 
     @Override
     public E remove(int index) {
         checkIndex(index);
-        E deletedItem = items[index];
+
+        E removedItem = items[index];
+
         System.arraycopy(items, index + 1, items, index, size - 1 - index);
-        items[size] = null;
+        items[size - 1] = null;
+
         size--;
-        return deletedItem;
+        modCount++;
+
+        return removedItem;
     }
 
     @Override
     public boolean addAll(Collection c) {
-        addAll(size, c);
-        return true;
+        return addAll(size, c);
     }
 
     @Override
     public boolean addAll(int index, Collection c) {
-        if (index != 0) {
-            checkIndex(index - 1);
+        if (c.isEmpty() || c.getClass() != getClass()) {
+            return false;
         }
 
+        checkPreviousIndex(index);
         int collectionSize = c.size();
+        ensureCapacity(collectionSize + size);
 
-        ensureCapacity(collectionSize);
+        System.arraycopy(items, index, items, index + collectionSize, size - index);
 
-        for (int i = size + collectionSize - 1, j = size - 1; j >= index; i--, j--) {
-            items[i] = items[j];
-        }
-
-        for (int i = 0, j = index; i < collectionSize; i++, j++) {
+        for (Object item : c) {
             //noinspection unchecked
-            items[j] = (E) c.toArray()[i];
+            items[index] = (E) item;
+            index++;
         }
 
         size += c.size();
+        modCount += c.size();
         return true;
     }
 
     @Override
     public void clear() {
-        if (size != 0) {
-            for (int i = 0; i < size; i++) {
-                items[i] = null;
-            }
-
-            size = 0;
+        if (size == 0) {
+            return;
         }
+
+        Arrays.fill(items, null);
+
+        modCount += size;
+        size = 0;
     }
 
     @Override
@@ -186,25 +206,23 @@ public class List<E> implements java.util.List<E> {
     }
 
     @Override
-    public E set(int index, Object item) {
+    public E set(int index, E item) {
         checkIndex(index);
 
-        Object deletedItem = items[index];
+        E oldItem = items[index];
+        items[index] = item;
 
-        //noinspection unchecked
-        items[index] = (E) item;
-        return (E) deletedItem;
+        modCount++;
+        return oldItem;
     }
 
     @Override
     public int indexOf(Object o) {
-        boolean isBothNull;
-
         for (int i = 0; i < size; i++) {
             E item = items[i];
-            isBothNull = (o == null && null == item);
+            boolean isBothNull = (Objects.equals(o, null) && Objects.equals(item, null));
 
-            if (isBothNull || (null != item && item.equals(o))) {
+            if (isBothNull || (!Objects.equals(item, null) && item.equals(o))) {
                 return i;
             }
         }
@@ -214,20 +232,17 @@ public class List<E> implements java.util.List<E> {
 
     @Override
     public int lastIndexOf(Object o) {
-        boolean isBothNull;
-
         for (int i = size - 1; i > -1; i--) {
             E item = items[i];
-            isBothNull = (o == null && null == item);
+            boolean isBothNull = (Objects.equals(o, null) && Objects.equals(item, null));
 
-            if (isBothNull || (null != item && item.equals(o))) {
+            if (isBothNull || (!Objects.equals(item, null) && item.equals(o))) {
                 return i;
             }
         }
 
         return -1;
     }
-
 
     @Override
     public java.util.ListIterator listIterator() {
@@ -246,24 +261,14 @@ public class List<E> implements java.util.List<E> {
 
     @Override
     public boolean retainAll(Collection c) {
+        if (c.isEmpty() || c.getClass() != getClass()) {
+            return false;
+        }
+
         boolean hasRemoval = false;
-        int collectionSize = c.size();
-        boolean hasCoincided;
-        boolean isBothNull;
 
-        for (int i = size - 1; i > -1; i--) {
-            hasCoincided = false;
-
-            for (int j = 0; j < collectionSize; j++) {
-                isBothNull = (c.toArray()[j] == null && null == items[i]);
-
-                if (items[i] != null && items[i].equals(c.toArray()[j]) || isBothNull) {
-                    hasCoincided = true;
-                    break;
-                }
-            }
-
-            if (!hasCoincided) {
+        for (int i = size - 1; i >= 0; i--) {
+            if (!c.contains(items[i])) {
                 remove(i);
                 hasRemoval = true;
             }
@@ -274,28 +279,14 @@ public class List<E> implements java.util.List<E> {
 
     @Override
     public boolean removeAll(Collection c) {
-        if (size == 0) {
+        if (c.isEmpty() || c.getClass() != getClass()) {
             return false;
         }
 
         boolean hasRemoval = false;
-        int collectionSize = c.size();
-        boolean isBothNull;
-        boolean coincided;
 
-        for (int i = size - 1; i > -1; i--) {
-            coincided = false;
-
-            for (int j = 0; j < collectionSize; j++) {
-                isBothNull = c.toArray()[j] == null && items[i] == null;
-
-                if ((items[i] != null && items[i].equals(c.toArray()[j])) || isBothNull) {
-                    coincided = true;
-                    break;
-                }
-            }
-
-            if (coincided) {
+        for (int i = size - 1; i >= 0; i--) {
+            if (c.contains(items[i])) {
                 remove(i);
                 hasRemoval = true;
             }
@@ -306,30 +297,29 @@ public class List<E> implements java.util.List<E> {
 
     @Override
     public boolean containsAll(Collection c) {
-        boolean hasMatch = false;
-
         for (Object item : c) {
-
-            hasMatch = contains(item);
-
-            if (!hasMatch) {
+            if (!contains(item)) {
                 return false;
             }
         }
 
-        return hasMatch;
+        return true;
     }
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("{");
+        if (size == 0) {
+            return "[]";
+        }
+
+        StringBuilder stringBuilder = new StringBuilder("[");
         stringBuilder.append(items[0]);
 
-        for (int i = 1; i < items.length; i++) {
+        for (int i = 1; i < size; i++) {
             stringBuilder.append(", ").append(items[i]);
         }
 
-        stringBuilder.append('}');
+        stringBuilder.append(']');
         return stringBuilder.toString();
     }
 
@@ -344,16 +334,16 @@ public class List<E> implements java.util.List<E> {
         }
 
         //noinspection rawtypes
-        List list = (List) o;
-        return size == list.size && Arrays.equals(items, list.items);
+        ArrayList list = (ArrayList) o;
+        return size == list.size &&
+                Arrays.equals(Arrays.copyOf(items, size), Arrays.copyOf(list.items, list.size));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int hash = 3;
-        hash = prime * hash + size;
-        hash = prime * hash + Arrays.hashCode(items);
+        hash = prime * hash + Arrays.hashCode(Arrays.copyOf(items, size));
         return hash;
     }
 }
