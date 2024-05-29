@@ -94,7 +94,7 @@ public class ArrayList<E> implements java.util.List<E> {
     }
 
     public void trimToSize() {
-        if (size / 2 < items.length) {
+        if (size < items.length / 2) {
             items = Arrays.copyOf(items, size);
         }
     }
