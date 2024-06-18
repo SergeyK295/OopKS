@@ -6,11 +6,12 @@ public class HashTable<E> implements Collection<E> {
     private ArrayList<E>[] lists;
     private int size;
     private final double fillRatio;
-
+    private final int capacity = 20;
+    private int modCount;
 
     public HashTable() {
         //noinspection unchecked
-        lists = (ArrayList<E>[]) new ArrayList[20];
+        lists = (ArrayList<E>[]) new ArrayList[capacity];
         fillRatio = 0.75;
     }
 
@@ -26,8 +27,7 @@ public class HashTable<E> implements Collection<E> {
         this.fillRatio = fillRatio;
     }
 
-    //  todo пункт 8
-    public int indexOf(Object object) {
+    private int getIndexList(Object object) {
         if (object == null) {
             return 0;
         }
@@ -47,27 +47,24 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean contains(Object object) {
-        if (lists[indexOf(object)] == null || lists[indexOf(object)].isEmpty()) {
-            return false;
-        }
-
-        return lists[indexOf(object)].contains(object);
+        int indexList = getIndexList(object);
+        return lists[indexList] != null && lists[indexList].contains(object);
     }
 
     @Override
     public Iterator<E> iterator() {
-        return new ListIterator();
+        return new HashTableIterator();
     }
 
-    private class ListIterator implements Iterator<E> {
-        private int visitedItemsCounter;
+    private class HashTableIterator implements Iterator<E> {
+        private int visitedItemsCount;
         private int arrayIndex;
         private int listIndex;
-        private final int modCount = Arrays.hashCode(lists);
+        private final int modCount = HashTable.this.modCount;
 
         @Override
         public boolean hasNext() {
-            return visitedItemsCounter < size;
+            return visitedItemsCount < size;
         }
 
         @Override
@@ -76,7 +73,7 @@ public class HashTable<E> implements Collection<E> {
                 throw new NoSuchElementException("Коллекция закончилась");
             }
 
-            if (modCount != Arrays.hashCode(lists)) {
+            if (modCount != HashTable.this.modCount) {
                 throw new ConcurrentModificationException("Коллекция изменилась за время обхода");
             }
 
@@ -92,7 +89,7 @@ public class HashTable<E> implements Collection<E> {
             }
 
             listIndex++;
-            visitedItemsCounter++;
+            visitedItemsCount++;
 
             return result;
         }
@@ -101,23 +98,24 @@ public class HashTable<E> implements Collection<E> {
     @Override
     public Object[] toArray() {
         Object[] result = new Object[lists.length];
-        int itemIndex = 0;
+        int i = 0;
 
         for (Object item : lists) {
-            result[itemIndex] = item;
-            itemIndex++;
+            result[i] = item;
+            i++;
         }
 
         return result;
     }
 
     @Override
-    public <E> E[] toArray(E[] array) {
+    public <T> T[] toArray(T[] array) {
         if (array.length < lists.length) {
             //noinspection unchecked
-            return (E[]) toArray();
+            return (T[]) Arrays.copyOf(lists, lists.length, array.getClass());
         }
 
+        //noinspection SuspiciousSystemArraycopy
         System.arraycopy(toArray(), 0, array, 0, lists.length);
 
         if (array.length > size) {
@@ -127,34 +125,26 @@ public class HashTable<E> implements Collection<E> {
         return array;
     }
 
-    public void ensureCapacity(int capacity) {
-        if ((double) size / lists.length > fillRatio) {
-            while (capacity + size >= lists.length) {
-                lists = Arrays.copyOf(lists, lists.length * 2);
-            }
-        }
-    }
-
     @Override
     public boolean add(E item) {
-        ensureCapacity(1);
-        int index = indexOf(item);
+        int index = getIndexList(item);
 
         if (lists[index] == null) {
             lists[index] = new ArrayList<>();
         }
 
         lists[index].add(item);
+        modCount++;
         size++;
         return true;
     }
 
     @Override
     public boolean remove(Object object) {
-        int index = indexOf(object);
+        int index = getIndexList(object);
 
-        if (lists[index] != null && lists[index].contains(object)) {
-            lists[index].remove(object);
+        if (lists[index] != null && lists[index].remove(object)) {
+            modCount++;
             size--;
             return true;
         }
@@ -163,10 +153,13 @@ public class HashTable<E> implements Collection<E> {
     }
 
     @Override
-    public boolean addAll(Collection collection) {
-        for (Object item : collection) {
-            //noinspection unchecked
-            add((E) item);
+    public boolean addAll(Collection<? extends E> collection) {
+        if (collection.isEmpty()) {
+            return false;
+        }
+
+        for (E item : collection) {
+            add(item);
         }
 
         return true;
@@ -175,47 +168,57 @@ public class HashTable<E> implements Collection<E> {
     @Override
     public void clear() {
         if (size != 0) {
-            Arrays.fill(lists, null);
+            for (int i = 0; i < capacity; i++) {
+                lists[i].clear();
+            }
 
+            modCount += size;
             size = 0;
         }
     }
 
     @Override
-    public boolean retainAll(Collection collection) {
+    public boolean retainAll(Collection<?> collection) {
         size = 0;
+        boolean mod = false;
 
-        for (int i = lists.length - 1; i > 0; i--) {
-            while (lists[i] == null || lists[i].isEmpty()) {
-                i--;
+        for (int i = 0; i < capacity; i++) {
+            if (!lists[i].isEmpty()) {
+                if (lists[i].retainAll(collection)) {
+                    mod = true;
+                }
+
+                size += lists[i].size();
             }
-
-            lists[i].retainAll(collection);
-            size += lists[i].size();
         }
 
-        return size != 0;
+        modCount += size;
+        return mod;
+
     }
 
     @Override
-    public boolean removeAll(Collection collection) {
+    public boolean removeAll(Collection<?> collection) {
         size = 0;
+        boolean mod = false;
 
-        for (int i = lists.length - 1; i > 0; i--) {
-            while (lists[i] == null || lists[i].isEmpty()) {
-                i--;
+        for (int i = 0; i < capacity; i++) {
+            if (!lists[i].isEmpty()) {
+                if (lists[i].removeAll(collection)) {
+                    mod = true;
+                }
+
+                size += lists[i].size();
             }
-
-            lists[i].removeAll(collection);
-            size += lists[i].size();
         }
 
-        return size != 0;
+        modCount += size;
+        return mod;
     }
 
     @Override
-    public boolean containsAll(Collection collection) {
-        if (size == 0) {
+    public boolean containsAll(Collection<?> collection) {
+        if (size == 0 || collection.isEmpty()) {
             return false;
         }
 
@@ -228,6 +231,7 @@ public class HashTable<E> implements Collection<E> {
         return true;
     }
 
+    @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("{");
         stringBuilder.append(lists[0]);
