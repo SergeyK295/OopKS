@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static ArrayList<String> getLinesFile(String fileName) throws IOException {
+    public static ArrayList<String> getFileLines(String fileName) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             ArrayList<String> lines = new ArrayList<>();
             String line;
@@ -40,15 +40,15 @@ public class Main {
 
     public static void main(String[] args) {
         String fileName = "line.txt";
-        ArrayList<String> fileLines;
 
         try {
-            fileLines = getLinesFile(fileName);
+            ArrayList<String> fileLines;
+            fileLines = getFileLines(fileName);
             System.out.println("Строки из файла: " + fileLines);
         } catch (FileNotFoundException e) {
             System.out.println("Ошибка! Файл не найден!");
         } catch (IOException e) {
-            System.out.println("Файл не прочитан: " + e.getMessage());
+            System.out.println("Ошибка при чтении файла: " + e.getMessage());
         }
 
         ArrayList<Integer> numbersList1 = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 1, 12, 13, 4, 6, 7, 3, 17, 9, 10));
@@ -56,7 +56,7 @@ public class Main {
         deleteEvenNumbers(numbersList1);
         System.out.println("Список без четных чисел: " + numbersList1);
 
-        ArrayList<Integer> numbersList2 = getUniqueItemsList(numbersList1);
-        System.out.println("Список чисел без повторения: " + numbersList2);
+        ArrayList<Integer> uniqueNumbersList = getUniqueItemsList(numbersList1);
+        System.out.println("Список чисел без повторений: " + uniqueNumbersList);
     }
 }
