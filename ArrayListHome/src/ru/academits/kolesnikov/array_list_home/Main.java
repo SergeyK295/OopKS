@@ -42,8 +42,7 @@ public class Main {
         String fileName = "line.txt";
 
         try {
-            ArrayList<String> fileLines;
-            fileLines = getFileLines(fileName);
+            ArrayList<String> fileLines = getFileLines(fileName);
             System.out.println("Строки из файла: " + fileLines);
         } catch (FileNotFoundException e) {
             System.out.println("Ошибка! Файл не найден!");
@@ -51,12 +50,12 @@ public class Main {
             System.out.println("Ошибка при чтении файла: " + e.getMessage());
         }
 
-        ArrayList<Integer> numbersList1 = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 1, 12, 13, 4, 6, 7, 3, 17, 9, 10));
-        System.out.println("Изначальный список чисел: " + numbersList1);
-        deleteEvenNumbers(numbersList1);
-        System.out.println("Список без четных чисел: " + numbersList1);
+        ArrayList<Integer> numbersList = new ArrayList<>(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 1, 12, 13, 4, 6, 7, 3, 17, 9, 10));
+        System.out.println("Изначальный список чисел: " + numbersList);
+        deleteEvenNumbers(numbersList);
+        System.out.println("Список без четных чисел: " + numbersList);
 
-        ArrayList<Integer> uniqueNumbersList = getUniqueItemsList(numbersList1);
+        ArrayList<Integer> uniqueNumbersList = getUniqueItemsList(numbersList);
         System.out.println("Список чисел без повторений: " + uniqueNumbersList);
     }
 }
