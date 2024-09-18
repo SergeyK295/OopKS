@@ -15,7 +15,7 @@ public class SinglyLinkedList<E> {
     }
 
     public E getFirst() {
-        checkForOccupancyList();
+        checkIfEmptyList();
 
         return head.getData();
     }
@@ -60,9 +60,9 @@ public class SinglyLinkedList<E> {
         }
 
         ListItem<E> previousItem = getItem(index - 1);
+
         if (index == 0) {
-            previousItem.setNext(new ListItem<>(previousItem.getData(), previousItem.getNext()));
-            head.setData(data);
+            addFirst(data);
         } else {
             previousItem.setNext(new ListItem<>(data, previousItem.getNext()));
         }
@@ -72,7 +72,6 @@ public class SinglyLinkedList<E> {
 
     public boolean deleteByData(E data) {
         if (size == 0) {
-            System.out.println("Список пуст.");
             return false;
         }
 
@@ -93,7 +92,7 @@ public class SinglyLinkedList<E> {
     }
 
     public E deleteFirst() {
-        checkForOccupancyList();
+        checkIfEmptyList();
 
         E deletedItem = head.getData();
         head = head.getNext();
@@ -126,8 +125,7 @@ public class SinglyLinkedList<E> {
         ListItem<E> copiedItem = listCopy.head;
 
         for (ListItem<E> item = head.getNext(); item != null; item = item.getNext()) {
-            E data = item.getData();
-            copiedItem.setNext(new ListItem<>(data));
+            copiedItem.setNext(new ListItem<>(item.getData()));
             copiedItem = copiedItem.getNext();
         }
 
@@ -154,7 +152,7 @@ public class SinglyLinkedList<E> {
         StringBuilder stringBuilder = new StringBuilder("[");
         ListItem<E> item = head;
 
-        for (int i = 0; i < size; i++) {
+        while (item != null) {
             stringBuilder.append(item.getData()).append(", ");
             item = item.getNext();
         }
@@ -162,17 +160,18 @@ public class SinglyLinkedList<E> {
         int stringLength = stringBuilder.length();
         stringBuilder.delete(stringLength - 2, stringLength);
 
-        stringBuilder.append("]");
+        char brace = ']';
+        stringBuilder.append(brace);
         return stringBuilder.toString();
     }
 
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Нет индекса со значением " + index + ". Допустимое значение от 0 до " + size);
+            throw new IndexOutOfBoundsException("Нет индекса со значением " + index + ". Допустимое значение от 0 до " + (size - 1) + " включительно");
         }
     }
 
-    private void checkForOccupancyList() {
+    private void checkIfEmptyList() {
         if (size == 0) {
             throw new NoSuchElementException("Список пуст.");
         }
