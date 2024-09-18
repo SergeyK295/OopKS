@@ -1,16 +1,23 @@
 package ru.academits.kolesnokov.array_list;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.ListIterator;
+import java.util.List;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.ConcurrentModificationException;
+import java.util.Objects;
 
-public class ArrayList<E> {
-    private static final int defaultCapacity = 10;
+public class ArrayList<E> implements List<E> {
+    private static final int Default_Capacity = 10;
     private E[] items;
     private int size;
     private int modCount;
 
     public ArrayList(int defaultCapacity) {
         if (defaultCapacity < 0) {
-            throw new NoSuchElementException("Передано недопустимое значение \"" + defaultCapacity + "\" вместимость списка должна быть не меньше 0");
+            throw new NegativeArraySizeException("Передано недопустимое значение \"" + defaultCapacity + "\", вместимость списка должна быть не меньше 0");
         }
 
         //noinspection unchecked
@@ -19,7 +26,7 @@ public class ArrayList<E> {
 
     public ArrayList() {
         //noinspection unchecked
-        items = (E[]) new Object[defaultCapacity];
+        items = (E[]) new Object[Default_Capacity];
     }
 
     public int size() {
@@ -36,7 +43,7 @@ public class ArrayList<E> {
 
     private class ListIterator implements Iterator<E> {
         private int currentIndex = -1;
-        private final int initialModCount = ArrayList.this.modCount;
+        private final int initialModCount = modCount;
 
         @Override
         public boolean hasNext() {
@@ -49,7 +56,7 @@ public class ArrayList<E> {
                 throw new NoSuchElementException("Коллекция закончилась");
             }
 
-            if (initialModCount != ArrayList.this.modCount) {
+            if (initialModCount != modCount) {
                 throw new ConcurrentModificationException("Коллекция изменилась за время обхода");
             }
 
@@ -82,14 +89,14 @@ public class ArrayList<E> {
         return array;
     }
 
-    public void ensureCapacity(int minCapacity) {
-        if (minCapacity > items.length) {
-            items = Arrays.copyOf(items, minCapacity);
+    public void ensureCapacity(int capacity) {
+        if (capacity > items.length) {
+            items = Arrays.copyOf(items, capacity);
         }
     }
 
     public void trimToSize() {
-        if (size < modCount / 2) {
+        if (size <= modCount) {
             items = Arrays.copyOf(items, size);
         }
     }
@@ -106,10 +113,18 @@ public class ArrayList<E> {
     }
 
     public void add(int index, E item) {
-        checkIndex(index);
+        if (index != size) {
+            checkIndex(index);
+        }
 
-        if (size == items.length) {
-            items = Arrays.copyOf(items, size * 2 + 1);
+        int capacity = items.length;
+
+        if (size == capacity) {
+            if (capacity == 0) {
+                items = Arrays.copyOf(items, Default_Capacity);
+            } else {
+                items = Arrays.copyOf(items, size * 2);
+            }
         }
 
         System.arraycopy(items, index, items, index + 1, size - index);
@@ -130,6 +145,7 @@ public class ArrayList<E> {
         return true;
     }
 
+
     public E remove(int index) {
         checkIndex(index);
 
@@ -149,7 +165,9 @@ public class ArrayList<E> {
     }
 
     public boolean addAll(int index, Collection c) {
-        checkIndex(index);
+        if (index != size) {
+            checkIndex(index);
+        }
 
         if (c.isEmpty()) {
             return false;
@@ -176,7 +194,7 @@ public class ArrayList<E> {
             return;
         }
 
-        Arrays.fill(items, 0, size - 1, null);
+        Arrays.fill(items, 0, size, null);
 
         modCount++;
         size = 0;
@@ -214,6 +232,21 @@ public class ArrayList<E> {
         }
 
         return -1;
+    }
+
+    @Override
+    public java.util.ListIterator<E> listIterator() {
+        return null;
+    }
+
+    @Override
+    public java.util.ListIterator<E> listIterator(int index) {
+        return null;
+    }
+
+    @Override
+    public List<E> subList(int fromIndex, int toIndex) {
+        return List.of();
     }
 
     public boolean retainAll(Collection c) {
@@ -288,14 +321,25 @@ public class ArrayList<E> {
         }
 
         ArrayList<E> list = (ArrayList<E>) o;
-        return size == list.size && Arrays.equals(items, list.items);
+
+        if (size == list.size) {
+            for (int i = 0; i <= size; i++) {
+                if (!items[i].equals(list.items[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        return false;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int hash = 1;
-        hash = prime * hash + size + Arrays.hashCode(items);
+        hash = prime * hash + size;
+        hash = prime * hash + Arrays.hashCode(items);
         return hash;
     }
 }
