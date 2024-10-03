@@ -18,10 +18,7 @@ public class Main {
     }
 
     public static Map<String, Double> getAverageAgesByNames(List<Person> persons) {
-        Map<String, List<Person>> personsByNames = persons.stream().collect(Collectors.groupingBy(Person::name));
-
-        return personsByNames.keySet().stream()
-                .collect(Collectors.toMap(name -> name, name -> personsByNames.get(name).stream().mapToInt(Person::age).average().orElseThrow()));
+        return persons.stream().collect(Collectors.groupingBy(Person::name, Collectors.averagingInt(Person::age)));
     }
 
     public static void main(String[] args) {
