@@ -3,31 +3,27 @@ package ru.academits.kolesnikov.hash_table;
 import java.util.*;
 
 public class HashTable<E> implements Collection<E> {
-    private ArrayList<E>[] lists;
+    private static final int defaultCapacity = 20;
+
+    private final ArrayList<E>[] lists;
     private int size;
-    private final double fillRatio;
-    private final int capacity = 20;
     private int modCount;
 
     public HashTable() {
         //noinspection unchecked
-        lists = (ArrayList<E>[]) new ArrayList[capacity];
-        fillRatio = 0.75;
+        lists = (ArrayList<E>[]) new ArrayList[defaultCapacity];
     }
 
+    @SuppressWarnings("unchecked")
     public HashTable(int capacity) {
-        //noinspection unchecked
-        lists = (ArrayList<E>[]) new ArrayList[capacity];
-        fillRatio = 0.75;
+        if (capacity > 0) {
+            lists = (ArrayList<E>[]) new ArrayList[capacity];
+        } else {
+            lists = (ArrayList<E>[]) new ArrayList[defaultCapacity];
+        }
     }
 
-    public HashTable(int capacity, double fillRatio) {
-        //noinspection unchecked
-        lists = (ArrayList<E>[]) new ArrayList[capacity];
-        this.fillRatio = fillRatio;
-    }
-
-    private int getIndexList(Object object) {
+    private int getListIndex(Object object) {
         if (object == null) {
             return 0;
         }
@@ -47,8 +43,8 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean contains(Object object) {
-        int indexList = getIndexList(object);
-        return lists[indexList] != null && lists[indexList].contains(object);
+        int listIndex = getListIndex(object);
+        return lists[listIndex] != null && lists[listIndex].contains(object);
     }
 
     @Override
@@ -60,7 +56,7 @@ public class HashTable<E> implements Collection<E> {
         private int visitedItemsCount;
         private int arrayIndex;
         private int listIndex;
-        private final int modCount = HashTable.this.modCount;
+        private final int initialModCount = modCount;
 
         @Override
         public boolean hasNext() {
@@ -73,7 +69,7 @@ public class HashTable<E> implements Collection<E> {
                 throw new NoSuchElementException("Коллекция закончилась");
             }
 
-            if (modCount != HashTable.this.modCount) {
+            if (initialModCount != modCount) {
                 throw new ConcurrentModificationException("Коллекция изменилась за время обхода");
             }
 
@@ -81,7 +77,7 @@ public class HashTable<E> implements Collection<E> {
                 arrayIndex++;
             }
 
-            E result = lists[arrayIndex].get(listIndex);
+            E item = lists[arrayIndex].get(listIndex);
 
             if (listIndex == lists[arrayIndex].size() - 1) {
                 ++arrayIndex;
@@ -91,18 +87,22 @@ public class HashTable<E> implements Collection<E> {
             listIndex++;
             visitedItemsCount++;
 
-            return result;
+            return item;
         }
     }
 
     @Override
     public Object[] toArray() {
-        Object[] result = new Object[lists.length];
+        Object[] result = new Object[size];
         int i = 0;
 
-        for (Object item : lists) {
-            result[i] = item;
-            i++;
+        for (ArrayList<E> item : lists) {
+            if (item != null) {
+                for (E e : item) {
+                    result[i] = e;
+                    i++;
+                }
+            }
         }
 
         return result;
@@ -110,13 +110,13 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public <T> T[] toArray(T[] array) {
-        if (array.length < lists.length) {
+        if (array.length < size) {
             //noinspection unchecked
-            return (T[]) Arrays.copyOf(lists, lists.length, array.getClass());
+            return (T[]) Arrays.copyOf(toArray(), size, array.getClass());
         }
 
         //noinspection SuspiciousSystemArraycopy
-        System.arraycopy(toArray(), 0, array, 0, lists.length);
+        System.arraycopy(toArray(), 0, array, 0, size);
 
         if (array.length > size) {
             array[size] = null;
@@ -127,13 +127,13 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean add(E item) {
-        int index = getIndexList(item);
+        int listIndex = getListIndex(item);
 
-        if (lists[index] == null) {
-            lists[index] = new ArrayList<>();
+        if (lists[listIndex] == null) {
+            lists[listIndex] = new ArrayList<>();
         }
 
-        lists[index].add(item);
+        lists[listIndex].add(item);
         modCount++;
         size++;
         return true;
@@ -141,9 +141,9 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean remove(Object object) {
-        int index = getIndexList(object);
+        int listIndex = getListIndex(object);
 
-        if (lists[index] != null && lists[index].remove(object)) {
+        if (lists[listIndex] != null && lists[listIndex].remove(object)) {
             modCount++;
             size--;
             return true;
@@ -167,58 +167,67 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public void clear() {
-        if (size != 0) {
-            for (int i = 0; i < capacity; i++) {
-                lists[i].clear();
-            }
-
-            modCount += size;
-            size = 0;
+        if (size == 0) {
+            return;
         }
+
+        for (ArrayList<E> list : lists) {
+            list.clear();
+        }
+
+        modCount++;
+        size = 0;
+
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
         size = 0;
-        boolean mod = false;
+        boolean hasModification = false;
 
-        for (int i = 0; i < capacity; i++) {
+        for (int i = 0; i < defaultCapacity; i++) {
             if (!lists[i].isEmpty()) {
                 if (lists[i].retainAll(collection)) {
-                    mod = true;
+                    hasModification = true;
                 }
 
                 size += lists[i].size();
             }
         }
 
-        modCount += size;
-        return mod;
+        if (hasModification) {
+            modCount++;
+        }
+
+        return hasModification;
 
     }
 
     @Override
     public boolean removeAll(Collection<?> collection) {
         size = 0;
-        boolean mod = false;
+        boolean hasModification = false;
 
-        for (int i = 0; i < capacity; i++) {
+        for (int i = 0; i < defaultCapacity; i++) {
             if (!lists[i].isEmpty()) {
                 if (lists[i].removeAll(collection)) {
-                    mod = true;
+                    hasModification = true;
                 }
 
                 size += lists[i].size();
             }
         }
 
-        modCount += size;
-        return mod;
+        if (hasModification) {
+            modCount++;
+        }
+
+        return hasModification;
     }
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        if (size == 0 || collection.isEmpty()) {
+        if (size == 0 || collection.isEmpty() || size < collection.size()) {
             return false;
         }
 
