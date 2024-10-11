@@ -1,6 +1,6 @@
-package ru.academits.kolesnikov.tree.tree_node;
+package ru.academits.kolesnikov.tree;
 
-public class TreeNode<E> {
+class TreeNode<E> {
     private TreeNode<E> left;
     private TreeNode<E> right;
     private E data;
@@ -8,11 +8,6 @@ public class TreeNode<E> {
     public TreeNode(E data) {
         this.data = data;
     }
-
-    public TreeNode() {
-        this.data = null;
-    }
-
 
     public TreeNode<E> getLeft() {
         return left;
