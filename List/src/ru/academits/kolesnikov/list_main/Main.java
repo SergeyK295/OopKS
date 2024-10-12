@@ -6,8 +6,6 @@ public class Main {
     public static void main(String[] args) {
         SinglyLinkedList<Integer> list1 = new SinglyLinkedList<>();
 
-        list1.add(0,99);
-
         list1.addFirst(0);
 
         for (int i = 1; i < 10; i++) {
@@ -22,7 +20,7 @@ public class Main {
         System.out.println(list2);
 
         int deleteItem = 4;
-        System.out.println("Удалим элемент со значением: \"4\" " + list1.deleteByData(list1.get(deleteItem)));
+        System.out.println("Удалим элемент со значением: \"4\" " + list1.deleteByData(deleteItem));
         System.out.println(list1);
     }
 }
