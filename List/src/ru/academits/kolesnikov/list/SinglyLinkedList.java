@@ -55,17 +55,17 @@ public class SinglyLinkedList<E> {
     }
 
     public void add(int index, E data) {
+        if (index == 0) {
+            addFirst(data);
+            return;
+        }
+
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Нет индекса со значением " + index + ". Допустимое значение от 0 до " + size + " включительно.");
         }
 
         ListItem<E> previousItem = getItem(index - 1);
-
-        if (index == 0) {
-            addFirst(data);
-        } else {
-            previousItem.setNext(new ListItem<>(data, previousItem.getNext()));
-        }
+        previousItem.setNext(new ListItem<>(data, previousItem.getNext()));
 
         size++;
     }
@@ -160,8 +160,7 @@ public class SinglyLinkedList<E> {
         int stringLength = stringBuilder.length();
         stringBuilder.delete(stringLength - 2, stringLength);
 
-        char brace = ']';
-        stringBuilder.append(brace);
+        stringBuilder.append(']');
         return stringBuilder.toString();
     }
 

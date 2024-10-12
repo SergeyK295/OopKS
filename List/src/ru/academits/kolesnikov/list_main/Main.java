@@ -6,6 +6,8 @@ public class Main {
     public static void main(String[] args) {
         SinglyLinkedList<Integer> list1 = new SinglyLinkedList<>();
 
+        list1.add(0,99);
+
         list1.addFirst(0);
 
         for (int i = 1; i < 10; i++) {
