@@ -137,11 +137,6 @@ public class BinarySearchTree<E> {
             }
         }
 
-        if (parentDeleteNode.getLeft() == null && parentDeleteNode.getRight() == null) {
-            return false;
-        }
-
-
         if (deleteNode.getLeft() == null && deleteNode.getRight() == null) {
             if (isLeftChild) {
                 parentDeleteNode.setLeft(null);
