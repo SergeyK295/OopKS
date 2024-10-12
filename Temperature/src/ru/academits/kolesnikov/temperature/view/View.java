@@ -1,6 +1,7 @@
-package ru.academmits.kolesnikov.temperature.view;
+package ru.academits.kolesnikov.temperature.view;
 
-import ru.academmits.kolesnikov.temperature.controller.Controller;
+import ru.academits.kolesnikov.temperature.controller.Controller;
+
 public interface View {
     void start();
 

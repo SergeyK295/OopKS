@@ -1,6 +1,6 @@
-package ru.academmits.kolesnikov.temperature.view;
+package ru.academits.kolesnikov.temperature.view;
 
-import ru.academmits.kolesnikov.temperature.controller.Controller;
+import ru.academits.kolesnikov.temperature.controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,13 +10,11 @@ import java.awt.event.ItemListener;
 public class DesktopView implements View, ItemListener {
     private Controller controller;
     private JLabel resultLabel;
-    private static JPanel startPanel;
-    String[] scales = new String[2];
+    private JPanel startPanel;
+    private final String[] scales = new String[2];
 
     @Override
     public void start() {
-        String[] temperatureScale = new String[]{"Кельвина", "Фаренгейта", "Цельсия"};
-
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -25,18 +23,18 @@ public class DesktopView implements View, ItemListener {
 
             JFrame frame = new JFrame("Конвертер температур");
             frame.setLocationRelativeTo(null);
-            frame.setMinimumSize(new Dimension(700, 200));
+            frame.setMinimumSize(new Dimension(450, 120));
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
             startPanel = new JPanel();
             startPanel.add(new JLabel("Конвертировать температуру из градусов"));
 
-            JComboBox<String> comboBox = new JComboBox<>(temperatureScale);
+            String[] scaleNames = controller.getScaleNames();
+
+            JComboBox<String> comboBox = new JComboBox<>(scaleNames);
             comboBox.setEditable(false);
-            scales[0] = temperatureScale[0];
-            comboBox.addActionListener(e ->
-                    scales[0] = (String) comboBox.getSelectedItem()
-            );
+            scales[0] = scaleNames[0];
+            comboBox.addActionListener(e -> scales[0] = (String) comboBox.getSelectedItem());
             startPanel.add(comboBox);
 
             JTextField temperatureField = new JTextField(10);
@@ -45,16 +43,14 @@ public class DesktopView implements View, ItemListener {
             JPanel centerPanel = new JPanel();
             centerPanel.add(new JLabel("в градусы"));
 
-            JComboBox<String> comboBox2 = new JComboBox<>(temperatureScale);
+            JComboBox<String> comboBox2 = new JComboBox<>(scaleNames);
             comboBox2.setEditable(false);
-            scales[1] = temperatureScale[0];
-            comboBox2.addActionListener(e ->
-                    scales[1] = (String) comboBox2.getSelectedItem()
-            );
+            scales[1] = scaleNames[0];
+            comboBox2.addActionListener(e -> scales[1] = (String) comboBox2.getSelectedItem());
 
             centerPanel.add(comboBox2);
 
-            JButton startButton = new JButton("Старт");
+            JButton startButton = new JButton("Конвертировать");
             startButton.addActionListener(e -> {
                 try {
                     double temperature = Double.parseDouble(temperatureField.getText());
@@ -85,13 +81,13 @@ public class DesktopView implements View, ItemListener {
     }
 
     @Override
-    public void showTemperature(String scales, double temperature) {
-        resultLabel.setText("Температура в градусах " + scales + " = " + temperature);
+    public void showTemperature(String name, double temperature) {
+        resultLabel.setText("Температура в градусах " + name + " = " + temperature);
     }
 
     @Override
     public void itemStateChanged(ItemEvent event) {
-        CardLayout layout = (CardLayout) (startPanel.getLayout());
+        CardLayout layout = (CardLayout) startPanel.getLayout();
         layout.show(startPanel, (String) event.getItem());
     }
 }

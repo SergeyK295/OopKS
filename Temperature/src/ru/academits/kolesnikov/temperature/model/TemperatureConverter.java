@@ -1,4 +1,4 @@
-package ru.academmits.kolesnikov.temperature.model;
+package ru.academits.kolesnikov.temperature.model;
 
 public class TemperatureConverter implements Converter {
     @Override
@@ -29,5 +29,9 @@ public class TemperatureConverter implements Converter {
     @Override
     public double convertKelvinToCelsius(double temperature) {
         return temperature - 273.15;
+    }
+
+    public String[] getScaleNames(){
+        return new String[]{"Кельвина", "Фаренгейта", "Цельсия"};
     }
 }

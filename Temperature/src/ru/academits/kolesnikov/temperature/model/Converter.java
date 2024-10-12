@@ -1,4 +1,4 @@
-package ru.academmits.kolesnikov.temperature.model;
+package ru.academits.kolesnikov.temperature.model;
 
 public interface Converter {
     double convertCelsiusToKelvin(double temperature);
@@ -13,5 +13,5 @@ public interface Converter {
 
     double convertKelvinToCelsius(double temperature);
 
-
+    String[] getScaleNames();
 }
