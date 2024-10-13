@@ -2,8 +2,6 @@ package ru.academits.kolesnokov.array_list_main;
 
 import ru.academits.kolesnokov.array_list.ArrayList;
 
-import java.util.*;
-
 public class Main {
     public static void main(String[] args) {
         ArrayList list1 = new ArrayList(2);
