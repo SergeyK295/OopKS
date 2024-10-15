@@ -1,6 +1,7 @@
 package ru.academits.kolesnikov.hash_table_main;
 
 import ru.academits.kolesnikov.hash_table.HashTable;
+
 import java.util.ArrayList;
 
 public class Main {
@@ -21,7 +22,9 @@ public class Main {
         arrayList.add(9);
         arrayList.add(5);
 
-        hashTable.addAll(arrayList);
+        // hashTable.addAll(arrayList);
+
+        System.out.println( hashTable.containsAll(arrayList));
 
         System.out.println("Добавим в хэш таблицу список и распечатаем его " + hashTable);
     }

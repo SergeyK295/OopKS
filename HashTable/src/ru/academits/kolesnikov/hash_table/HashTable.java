@@ -3,7 +3,7 @@ package ru.academits.kolesnikov.hash_table;
 import java.util.*;
 
 public class HashTable<E> implements Collection<E> {
-    private static final int defaultCapacity = 20;
+    private static final int DEFAULT_CAPACITY = 20;
 
     private final ArrayList<E>[] lists;
     private int size;
@@ -11,15 +11,19 @@ public class HashTable<E> implements Collection<E> {
 
     public HashTable() {
         //noinspection unchecked
-        lists = (ArrayList<E>[]) new ArrayList[defaultCapacity];
+        lists = (ArrayList<E>[]) new ArrayList[DEFAULT_CAPACITY];
     }
 
     @SuppressWarnings("unchecked")
     public HashTable(int capacity) {
+        if (DEFAULT_CAPACITY < 0) {
+            throw new IllegalArgumentException("Передано недопустимое значение \"" + DEFAULT_CAPACITY + "\", вместимость списка должна быть не меньше 0");
+        }
+
         if (capacity > 0) {
             lists = (ArrayList<E>[]) new ArrayList[capacity];
         } else {
-            lists = (ArrayList<E>[]) new ArrayList[defaultCapacity];
+            lists = (ArrayList<E>[]) new ArrayList[DEFAULT_CAPACITY];
         }
     }
 
@@ -96,9 +100,9 @@ public class HashTable<E> implements Collection<E> {
         Object[] result = new Object[size];
         int i = 0;
 
-        for (ArrayList<E> item : lists) {
-            if (item != null) {
-                for (E e : item) {
+        for (ArrayList<E> list : lists) {
+            if (list != null) {
+                for (E e : list) {
                     result[i] = e;
                     i++;
                 }
@@ -171,63 +175,63 @@ public class HashTable<E> implements Collection<E> {
             return;
         }
 
-        for (ArrayList<E> list : lists) {
-            list.clear();
-        }
+        Arrays.fill(lists, 0, lists.length, null);
 
         modCount++;
         size = 0;
-
     }
 
     @Override
     public boolean retainAll(Collection<?> collection) {
         size = 0;
-        boolean hasModification = false;
+        boolean isModified = false;
 
-        for (int i = 0; i < defaultCapacity; i++) {
-            if (!lists[i].isEmpty()) {
-                if (lists[i].retainAll(collection)) {
-                    hasModification = true;
-                }
-
-                size += lists[i].size();
+        for (ArrayList<E> list : lists) {
+            if (list == null || list.isEmpty()) {
+                continue;
             }
+
+            if (list.retainAll(collection)) {
+                isModified = true;
+            }
+
+            size += list.size();
         }
 
-        if (hasModification) {
+        if (isModified) {
             modCount++;
         }
 
-        return hasModification;
-
+        return isModified;
     }
 
     @Override
     public boolean removeAll(Collection<?> collection) {
         size = 0;
-        boolean hasModification = false;
+        boolean isModified = false;
 
-        for (int i = 0; i < defaultCapacity; i++) {
-            if (!lists[i].isEmpty()) {
-                if (lists[i].removeAll(collection)) {
-                    hasModification = true;
-                }
-
-                size += lists[i].size();
+        for (ArrayList<E> list : lists) {
+            if (list == null || list.isEmpty()) {
+                continue;
             }
+
+            if (list.removeAll(collection)) {
+                isModified = true;
+            }
+
+            size += list.size();
         }
 
-        if (hasModification) {
+        if (isModified) {
             modCount++;
         }
 
-        return hasModification;
+        return isModified;
     }
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        if (size == 0 || collection.isEmpty() || size < collection.size()) {
+        if (collection.isEmpty() || size < collection.size()) {
             return false;
         }
 
