@@ -16,8 +16,8 @@ public class HashTable<E> implements Collection<E> {
 
     @SuppressWarnings("unchecked")
     public HashTable(int capacity) {
-        if (DEFAULT_CAPACITY < 0) {
-            throw new IllegalArgumentException("Передано недопустимое значение \"" + DEFAULT_CAPACITY + "\", вместимость списка должна быть не меньше 0");
+        if (DEFAULT_CAPACITY < 1) {
+            throw new IllegalArgumentException("Передано недопустимое значение \"" + DEFAULT_CAPACITY + "\", вместимость хэш-таблицы должна быть не меньше 1");
         }
 
         if (capacity > 0) {
@@ -175,7 +175,13 @@ public class HashTable<E> implements Collection<E> {
             return;
         }
 
-        Arrays.fill(lists, 0, lists.length, null);
+        for (ArrayList<E> list : lists) {
+            if (list == null || list.isEmpty()) {
+                continue;
+            }
+
+            list.clear();
+        }
 
         modCount++;
         size = 0;
@@ -231,8 +237,8 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        if (collection.isEmpty() || size < collection.size()) {
-            return false;
+        if (collection.isEmpty()) {
+            throw new NullPointerException("Переданная коллекция для сравнения  пуста");
         }
 
         for (Object object : collection) {
