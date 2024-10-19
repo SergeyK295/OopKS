@@ -20,8 +20,14 @@ public class Main {
         tree.add(9);
         tree.add(15);
         tree.add(18);
+        tree.add(30);
+        tree.add(40);
+        tree.add(25);
+        tree.add(24);
+        tree.add(22);
+        tree.add(23);
 
-        System.out.println("Проверим есть ли в дереве элемент со значением 9: " + tree.contains(99));
+        System.out.println("Проверим есть ли в дереве элемент со значением 9: " + tree.contains(9));
         System.out.println();
 
         Consumer<Integer> print = x -> System.out.print(x + " ");
@@ -30,7 +36,7 @@ public class Main {
         System.out.println();
         System.out.println();
 
-        System.out.println("Удалим из дерева элемент 5 " + tree.remove(5));
+        System.out.println("Удалим из дерева элемент 10 " + tree.remove(10));
         System.out.println();
 
         System.out.println("Выведем в консоль дерево с помощью обхода в глубину без рекурсии:");
