@@ -1,5 +1,7 @@
 package ru.academits.kolesnokov.array_list;
 
+import jdk.internal.util.ArraysSupport;
+
 import java.util.*;
 
 public class ArrayList<E> implements List<E> {
@@ -38,7 +40,7 @@ public class ArrayList<E> implements List<E> {
         return indexOf(o) != -1;
     }
 
-    private class ListIteratorRemake implements Iterator<E> {
+    private class ArrayListIterator implements Iterator<E> {
         private int currentIndex = -1;
         private final int initialModCount = modCount;
 
@@ -64,7 +66,7 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new ListIteratorRemake();
+        return new ArrayListIterator();
     }
 
     @Override
@@ -101,7 +103,7 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
-    private void checkValidIndex(int index) {
+    private void checkIndex(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Индекс " + index + " некорректный. Допустимый диапазон от 0 до " + (size - 1) + " включительно");
         }
@@ -155,7 +157,7 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public E remove(int index) {
-        checkValidIndex(index);
+        checkIndex(index);
 
         E removedItem = items[index];
 
@@ -210,13 +212,13 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public E get(int index) {
-        checkValidIndex(index);
+        checkIndex(index);
         return items[index];
     }
 
     @Override
     public E set(int index, E item) {
-        checkValidIndex(index);
+        checkIndex(index);
 
         E oldItem = items[index];
         items[index] = item;
@@ -342,7 +344,15 @@ public class ArrayList<E> implements List<E> {
             return false;
         }
 
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i < size; i++) {
+            if (items[i] == null || list.items[i] == null) {
+                if (items[i] == null && list.items[i] == null) {
+                    continue;
+                }
+
+                return false;
+            }
+
             if (!items[i].equals(list.items[i])) {
                 return false;
             }
@@ -356,7 +366,7 @@ public class ArrayList<E> implements List<E> {
         final int prime = 31;
         int hash = 1;
         hash = prime * hash + size;
-        hash = prime * hash + Arrays.hashCode(Arrays.copyOf(items, size));
+        hash = prime * hash + ArraysSupport.hashCode(items, 0, size, size + 1);
         return hash;
     }
 }
