@@ -203,18 +203,18 @@ public class BinarySearchTree<E> {
             return;
         }
 
-        bypassWithRecursion(consumer, root);
+        bypassInDepthWithRecursion(consumer, root);
     }
 
-    private void bypassWithRecursion(Consumer<E> consumer, TreeNode<E> treeNode) {
+    private void bypassInDepthWithRecursion(Consumer<E> consumer, TreeNode<E> treeNode) {
         consumer.accept(treeNode.getData());
 
         if (treeNode.getLeft() != null) {
-            bypassWithRecursion(consumer, treeNode.getLeft());
+            bypassInDepthWithRecursion(consumer, treeNode.getLeft());
         }
 
         if (treeNode.getRight() != null) {
-            bypassWithRecursion(consumer, treeNode.getRight());
+            bypassInDepthWithRecursion(consumer, treeNode.getRight());
         }
     }
 
