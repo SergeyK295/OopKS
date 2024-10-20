@@ -4,7 +4,7 @@ import ru.academits.kolesnokov.array_list.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList <Integer> list1 = new ArrayList<>(2);
+        ArrayList<Integer> list1 = new ArrayList<>(2);
         list1.add(null);
         list1.add(3);
         list1.add(2);
@@ -12,7 +12,7 @@ public class Main {
         list1.set(2, 4);
         System.out.println("Первый список: " + list1);
 
-        ArrayList <Integer> list2 = new ArrayList<>();
+        ArrayList<Integer> list2 = new ArrayList<>();
         list2.add(null);
         list2.add(2);
         System.out.println("Второй список: " + list2);

@@ -1,7 +1,5 @@
 package ru.academits.kolesnokov.array_list;
 
-import jdk.internal.util.ArraysSupport;
-
 import java.util.*;
 
 public class ArrayList<E> implements List<E> {
@@ -188,12 +186,14 @@ public class ArrayList<E> implements List<E> {
 
         System.arraycopy(items, index, items, index + collectionSize, size - index);
 
+        int indexToAdd = index;
+
         for (E item : c) {
-            items[index] = item;
-            index++;
+            items[indexToAdd] = item;
+            indexToAdd++;
         }
 
-        size += c.size();
+        size += collectionSize;
         modCount++;
         return true;
     }
@@ -363,10 +363,18 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
+        final int prime = 3;
         int hash = 1;
         hash = prime * hash + size;
-        hash = prime * hash + ArraysSupport.hashCode(items, 0, size, size + 1);
+
+        for (int i = 0; i < size; i++) {
+            if (items[i] == null) {
+                continue;
+            }
+
+            hash = prime * hash + items[i].hashCode();
+        }
+
         return hash;
     }
 }

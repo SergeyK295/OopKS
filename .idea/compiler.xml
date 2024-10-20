@@ -2,7 +2,7 @@
 <project version="4">
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="ArrayList" options="--add-exports java.base/jdk.internal.util=ALL-UNNAMED" />
+      <module name="ArrayList" options="" />
     </option>
   </component>
 </project>
