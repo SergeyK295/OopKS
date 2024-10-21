@@ -13,5 +13,9 @@ public interface Converter {
 
     double convertKelvinToCelsius(double temperature);
 
-    String[] getScaleNames();
+    String[] getScalesNames();
+
+    double convertToCelsius(String convertFrom, double temperature);
+
+    double convertFromCelsius(String convertTo, double temperature);
 }

@@ -31,7 +31,31 @@ public class TemperatureConverter implements Converter {
         return temperature - 273.15;
     }
 
-    public String[] getScaleNames(){
-        return new String[]{"Кельвина", "Фаренгейта", "Цельсия"};
+    public String[] getScalesNames() {
+        return new String[]{"Цельсия", "Кельвина", "Фаренгейта"};
+    }
+
+    public double convertToCelsius(String convertFrom, double temperature) {
+        if (convertFrom.equals("Кельвина")) {
+            return convertKelvinToCelsius(temperature);
+        }
+
+        if (convertFrom.equals("Фаренгейта")) {
+            return convertFahrenheitToCelsius(temperature);
+        }
+
+        return temperature;
+    }
+
+    public double convertFromCelsius(String convertTo, double temperature) {
+        if (convertTo.equals("Фаренгейта")) {
+            return convertCelsiusToFahrenheit(temperature);
+        }
+
+        if (convertTo.equals("Кельвина")) {
+            return convertCelsiusToKelvin(temperature);
+        }
+
+        return temperature;
     }
 }

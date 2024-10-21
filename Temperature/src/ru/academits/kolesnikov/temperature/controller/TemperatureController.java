@@ -13,29 +13,14 @@ public class TemperatureController implements Controller {
     }
 
     @Override
-    public void convert(String[] scales, double temperature) {
-        double celsiusTemperature;
+    public void convert(String convertFrom, String convertTo, double temperature) {
+        double celsiusTemperature = converter.convertToCelsius(convertFrom, temperature);
+        double resultTemperature = converter.convertFromCelsius(convertTo, celsiusTemperature);
 
-        if (scales[0].equals("Кельвина")) {
-            celsiusTemperature = converter.convertKelvinToCelsius(temperature);
-        } else if (scales[0].equals("Фаренгейта")) {
-            celsiusTemperature = converter.convertFahrenheitToCelsius(temperature);
-        } else {
-            celsiusTemperature = temperature;
-        }
-
-        double resultTemperature = celsiusTemperature;
-
-        if (scales[1].equals("Фаренгейта")) {
-            resultTemperature = converter.convertCelsiusToFahrenheit(resultTemperature);
-        } else if (scales[1].equals("Кельвина")) {
-            resultTemperature = converter.convertCelsiusToKelvin(resultTemperature);
-        }
-
-        view.showTemperature(scales[1], resultTemperature);
+        view.showTemperature(convertTo, resultTemperature);
     }
 
-    public String[] getScaleNames(){
-        return converter.getScaleNames();
+    public String[] getScalesNames() {
+        return converter.getScalesNames();
     }
 }
