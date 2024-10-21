@@ -16,15 +16,11 @@ public class HashTable<E> implements Collection<E> {
 
     @SuppressWarnings("unchecked")
     public HashTable(int capacity) {
-        if (DEFAULT_CAPACITY < 1) {
-            throw new IllegalArgumentException("Передано недопустимое значение \"" + DEFAULT_CAPACITY + "\", вместимость хэш-таблицы должна быть не меньше 1");
+        if (capacity < 1) {
+            throw new IllegalArgumentException("Передано недопустимое значение \"" + capacity + "\", вместимость хэш-таблицы должна быть не меньше 1");
         }
 
-        if (capacity > 0) {
-            lists = (ArrayList<E>[]) new ArrayList[capacity];
-        } else {
-            lists = (ArrayList<E>[]) new ArrayList[DEFAULT_CAPACITY];
-        }
+        lists = (ArrayList<E>[]) new ArrayList[capacity];
     }
 
     private int getListIndex(Object object) {
@@ -237,10 +233,6 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean containsAll(Collection<?> collection) {
-        if (collection.isEmpty()) {
-            throw new NullPointerException("Переданная коллекция для сравнения  пуста");
-        }
-
         for (Object object : collection) {
             if (!contains(object)) {
                 return false;
