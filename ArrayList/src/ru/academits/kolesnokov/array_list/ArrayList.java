@@ -333,7 +333,7 @@ public class ArrayList<E> implements List<E> {
             return true;
         }
 
-        if (o.getClass() != getClass()) {
+        if (o == null || o.getClass() != getClass()) {
             return false;
         }
 
