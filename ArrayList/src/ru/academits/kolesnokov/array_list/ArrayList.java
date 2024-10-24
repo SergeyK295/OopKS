@@ -186,11 +186,11 @@ public class ArrayList<E> implements List<E> {
 
         System.arraycopy(items, index, items, index + collectionSize, size - index);
 
-        int indexToAdd = index;
+        int i = index;
 
         for (E item : c) {
-            items[indexToAdd] = item;
-            indexToAdd++;
+            items[i] = item;
+            i++;
         }
 
         size += collectionSize;
@@ -345,15 +345,7 @@ public class ArrayList<E> implements List<E> {
         }
 
         for (int i = 0; i < size; i++) {
-            if (items[i] == null || list.items[i] == null) {
-                if (items[i] == null && list.items[i] == null) {
-                    continue;
-                }
-
-                return false;
-            }
-
-            if (!items[i].equals(list.items[i])) {
+            if (!Objects.equals(items[i], list.items[i])) {
                 return false;
             }
         }
@@ -363,12 +355,13 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public int hashCode() {
-        final int prime = 3;
+        final int prime = 18;
         int hash = 1;
         hash = prime * hash + size;
 
         for (int i = 0; i < size; i++) {
             if (items[i] == null) {
+                hash = prime * hash;
                 continue;
             }
 
