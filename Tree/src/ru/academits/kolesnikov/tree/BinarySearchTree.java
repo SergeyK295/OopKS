@@ -100,7 +100,7 @@ public class BinarySearchTree<E> {
             return true;
         }
 
-        TreeNode<E> deleteNodeParent = root;
+        TreeNode<E> deleteNodeParent = new TreeNode<>(null);
         TreeNode<E> deleteNode = root;
         boolean isLeftChild;
 
