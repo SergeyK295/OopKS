@@ -25,7 +25,7 @@ public class BinarySearchTree<E> {
 
     public E getRoot() {
         if (size == 0) {
-            throw new NullPointerException("Ориентированный граф пуст.");
+            throw new NullPointerException("Размер дерава 0. Корень дерева пуст.");
         }
 
         return root.getData();
@@ -92,43 +92,41 @@ public class BinarySearchTree<E> {
             return false;
         }
 
-        TreeNode<E> deleteNode = root;
-        TreeNode<E> deleteNodeParent = root;
-        int comparisonResult = compare(deleteNodeParent.getData(), data);
-        boolean isLeftChild = false;
+        int comparisonResult = compare(root.getData(), data);
 
         if (comparisonResult == 0) {
-            root = getSuccessor(deleteNodeParent);
+            root = getSuccessor(root);
             size--;
             return true;
         }
 
-        while (deleteNodeParent.getLeft() != null || deleteNodeParent.getRight() != null) {
+        TreeNode<E> deleteNodeParent = root;
+        TreeNode<E> deleteNode = root;
+        boolean isLeftChild;
+
+        while (true) {
             if (comparisonResult > 0) {
-                deleteNode = deleteNodeParent.getLeft();
+                deleteNode = deleteNode.getLeft();
 
                 if (deleteNode == null) {
                     return false;
                 }
 
-                comparisonResult = compare(deleteNode.getData(), data);
-
-                if (comparisonResult == 0) {
-                    isLeftChild = true;
-                    break;
-                }
+                isLeftChild = true;
             } else {
-                deleteNode = deleteNodeParent.getRight();
+                deleteNode = deleteNode.getRight();
 
                 if (deleteNode == null) {
                     return false;
                 }
 
-                comparisonResult = compare(deleteNode.getData(), data);
+                isLeftChild = false;
+            }
 
-                if (comparisonResult == 0) {
-                    break;
-                }
+            comparisonResult = compare(deleteNode.getData(), data);
+
+            if (comparisonResult == 0) {
+                break;
             }
 
             deleteNodeParent = deleteNode;
@@ -136,11 +134,10 @@ public class BinarySearchTree<E> {
 
         if (isLeftChild) {
             deleteNodeParent.setLeft(getSuccessor(deleteNode));
-            size--;
-            return true;
+        } else {
+            deleteNodeParent.setRight(getSuccessor(deleteNode));
         }
 
-        deleteNodeParent.setRight(getSuccessor(deleteNode));
         size--;
         return true;
     }
@@ -154,13 +151,14 @@ public class BinarySearchTree<E> {
             return deleteNode.getLeft();
         }
 
-        TreeNode<E> replaceableNodeParent = deleteNode;
         TreeNode<E> replaceableNode = deleteNode.getRight();
 
         if (replaceableNode.getLeft() == null) {
             replaceableNode.setLeft(deleteNode.getLeft());
             return replaceableNode;
         }
+
+        TreeNode<E> replaceableNodeParent = deleteNode;
 
         while (replaceableNode.getLeft() != null) {
             replaceableNodeParent = replaceableNode;
@@ -263,12 +261,24 @@ public class BinarySearchTree<E> {
         return comparableData1.compareTo(data2);
     }
 
+    @Override
     public String toString() {
+        if (size == 0) {
+            return "[]";
+        }
+
         StringBuilder stringBuilder = new StringBuilder("[");
-        Consumer<E> consumer = x -> stringBuilder.append(", ").append(x);
-        bypassInWidth(consumer);
+
+        bypassInWidth(new Consumer<E>() {
+            @Override
+            public void accept(E e) {
+                stringBuilder.append(e).append(", ");
+            }
+        });
+
+        int stringLength = stringBuilder.length();
+        stringBuilder.delete(stringLength - 2, stringLength);
         stringBuilder.append(']');
-        stringBuilder.delete(1, 3);
         return stringBuilder.toString();
     }
 }
