@@ -11,17 +11,17 @@ public class DesktopView implements View, ItemListener {
     private Controller controller;
     private JLabel resultLabel;
     private JPanel startPanel;
-    private boolean startOn = false;
+    private boolean isStarted;
     private String convertFrom;
     private String convertTo;
 
     @Override
     public void start() {
-        if (startOn) {
-            throw new RuntimeException("Метод start уже был вызван.");
+        if (isStarted) {
+            throw new IllegalStateException("Метод start уже был вызван.");
         }
 
-        startOn = true;
+        isStarted = true;
 
         SwingUtilities.invokeLater(() -> {
             try {

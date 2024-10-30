@@ -1,61 +1,45 @@
 package ru.academits.kolesnikov.temperature.model;
 
+import java.util.HashMap;
+
 public class TemperatureConverter implements Converter {
-    @Override
-    public double convertCelsiusToKelvin(double temperature) {
-        return temperature + 273.15;
+    HashMap<String, Scales> scalesMap = new HashMap<>();
+    String[] scalesNames;
+
+    public TemperatureConverter() {
+        scalesMap.put("Цельсия", new Celsius());
+        scalesMap.put("Кельвина", new Kelvin());
+        scalesMap.put("Фаренгейта", new Fahrenheit());
+
+        scalesNames = new String[]{"Цельсия", "Кельвина", "Фаренгейта"};
     }
 
     @Override
-    public double convertCelsiusToFahrenheit(double temperature) {
-        return (temperature * 1.8) + 32;
-    }
-
-    @Override
-    public double convertFahrenheitToKelvin(double temperature) {
-        return (temperature + 459.67) / 1.8;
-    }
-
-    @Override
-    public double convertFahrenheitToCelsius(double temperature) {
-        return (temperature - 32) / 1.8;
-    }
-
-    @Override
-    public double convertKelvinToFahrenheit(double temperature) {
-        return temperature * 1.8 - 459.67;
-    }
-
-    @Override
-    public double convertKelvinToCelsius(double temperature) {
-        return temperature - 273.15;
-    }
-
     public String[] getScalesNames() {
-        return new String[]{"Цельсия", "Кельвина", "Фаренгейта"};
+        return scalesNames;
     }
 
+    @Override
     public double convertToCelsius(String convertFrom, double temperature) {
-        if (convertFrom.equals("Кельвина")) {
-            return convertKelvinToCelsius(temperature);
+        if (!scalesMap.containsKey(convertFrom)) {
+            throw new IllegalStateException("Не возможно перевести из шкалы " + convertFrom);
         }
 
-        if (convertFrom.equals("Фаренгейта")) {
-            return convertFahrenheitToCelsius(temperature);
-        }
-
-        return temperature;
+        return scalesMap.get(convertFrom).convertFromCelsius(temperature);
     }
 
+    @Override
     public double convertFromCelsius(String convertTo, double temperature) {
-        if (convertTo.equals("Фаренгейта")) {
-            return convertCelsiusToFahrenheit(temperature);
+        if (!scalesMap.containsKey(convertTo)) {
+            throw new IllegalStateException("Не возможно перевести в шкалу " + convertTo);
         }
 
-        if (convertTo.equals("Кельвина")) {
-            return convertCelsiusToKelvin(temperature);
-        }
+        return scalesMap.get(convertTo).convertToCelsius(temperature);
+    }
 
-        return temperature;
+    @Override
+    public double convert(String convertFrom, String convertTo, double temperature) {
+        double celsiusTemperature = convertToCelsius(convertFrom, temperature);
+        return convertFromCelsius(convertTo, celsiusTemperature);
     }
 }

@@ -14,10 +14,8 @@ public class TemperatureController implements Controller {
 
     @Override
     public void convert(String convertFrom, String convertTo, double temperature) {
-        double celsiusTemperature = converter.convertToCelsius(convertFrom, temperature);
-        double resultTemperature = converter.convertFromCelsius(convertTo, celsiusTemperature);
-
-        view.showTemperature(convertTo, resultTemperature);
+        temperature = converter.convert(convertFrom, convertTo, temperature);
+        view.showTemperature(convertTo, temperature);
     }
 
     public String[] getScalesNames() {
