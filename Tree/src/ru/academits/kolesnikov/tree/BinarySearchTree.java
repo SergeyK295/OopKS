@@ -25,7 +25,7 @@ public class BinarySearchTree<E> {
 
     public E getRoot() {
         if (size == 0) {
-            throw new NullPointerException("Размер дерава 0. Корень дерева пуст.");
+            throw new NullPointerException("Размер дерева 0. Корень дерева пуст.");
         }
 
         return root.getData();
@@ -100,11 +100,13 @@ public class BinarySearchTree<E> {
             return true;
         }
 
-        TreeNode<E> deleteNodeParent = new TreeNode<>(null);
+        TreeNode<E> deleteNodeParent = null;
         TreeNode<E> deleteNode = root;
-        boolean isLeftChild;
+        boolean isLeftChild = false;
 
-        while (true) {
+        while (comparisonResult != 0) {
+            deleteNodeParent = deleteNode;
+
             if (comparisonResult > 0) {
                 deleteNode = deleteNode.getLeft();
 
@@ -124,12 +126,6 @@ public class BinarySearchTree<E> {
             }
 
             comparisonResult = compare(deleteNode.getData(), data);
-
-            if (comparisonResult == 0) {
-                break;
-            }
-
-            deleteNodeParent = deleteNode;
         }
 
         if (isLeftChild) {
@@ -178,20 +174,20 @@ public class BinarySearchTree<E> {
             return;
         }
 
-        Queue<TreeNode<E>> queueList = new LinkedList<>();
-        queueList.add(root);
+        Queue<TreeNode<E>> queue = new LinkedList<>();
+        queue.add(root);
 
-        while (!queueList.isEmpty()) {
-            TreeNode<E> node = queueList.remove();
+        while (!queue.isEmpty()) {
+            TreeNode<E> node = queue.remove();
 
             consumer.accept(node.getData());
 
             if (node.getLeft() != null) {
-                queueList.add(node.getLeft());
+                queue.add(node.getLeft());
             }
 
             if (node.getRight() != null) {
-                queueList.add(node.getRight());
+                queue.add(node.getRight());
             }
         }
     }
@@ -221,20 +217,20 @@ public class BinarySearchTree<E> {
             return;
         }
 
-        Deque<TreeNode<E>> dequeList = new LinkedList<>();
-        dequeList.push(root);
+        Deque<TreeNode<E>> deque = new LinkedList<>();
+        deque.push(root);
 
-        while (!dequeList.isEmpty()) {
-            TreeNode<E> node = dequeList.pop();
+        while (!deque.isEmpty()) {
+            TreeNode<E> node = deque.pop();
 
             consumer.accept(node.getData());
 
             if (node.getRight() != null) {
-                dequeList.push(node.getRight());
+                deque.push(node.getRight());
             }
 
             if (node.getLeft() != null) {
-                dequeList.push(node.getLeft());
+                deque.push(node.getLeft());
             }
         }
     }
@@ -269,12 +265,7 @@ public class BinarySearchTree<E> {
 
         StringBuilder stringBuilder = new StringBuilder("[");
 
-        bypassInWidth(new Consumer<E>() {
-            @Override
-            public void accept(E e) {
-                stringBuilder.append(e).append(", ");
-            }
-        });
+        bypassInWidth(e -> stringBuilder.append(e).append(", "));
 
         int stringLength = stringBuilder.length();
         stringBuilder.delete(stringLength - 2, stringLength);
