@@ -12,8 +12,8 @@ public class DesktopView implements View, ItemListener {
     private JLabel resultLabel;
     private JPanel startPanel;
     private boolean isStarted;
-    private String convertFrom;
-    private String convertTo;
+    private String convertFromScale;
+    private String convertToScale;
 
     @Override
     public void start() {
@@ -40,11 +40,11 @@ public class DesktopView implements View, ItemListener {
 
             String[] scalesNames = controller.getScalesNames();
 
-            JComboBox<String> comboBox = new JComboBox<>(scalesNames);
-            comboBox.setEditable(false);
-            convertFrom = scalesNames[0];
-            comboBox.addActionListener(e -> convertFrom = (String) comboBox.getSelectedItem());
-            startPanel.add(comboBox);
+            JComboBox<String> convertFromScalesComboBox = new JComboBox<>(scalesNames);
+            convertFromScalesComboBox.setEditable(false);
+            convertFromScale = scalesNames[0];
+            convertFromScalesComboBox.addActionListener(e -> convertFromScale = (String) convertFromScalesComboBox.getSelectedItem());
+            startPanel.add(convertFromScalesComboBox);
 
             JTextField temperatureField = new JTextField(10);
             startPanel.add(temperatureField);
@@ -56,18 +56,18 @@ public class DesktopView implements View, ItemListener {
             scalesNames[0] = scalesNames[1];
             scalesNames[1] = temp;
 
-            JComboBox<String> comboBox2 = new JComboBox<>(scalesNames);
-            comboBox2.setEditable(false);
-            convertTo = scalesNames[0];
-            comboBox2.addActionListener(e -> convertTo = (String) comboBox2.getSelectedItem());
+            JComboBox<String> convertToScalesComboBox = new JComboBox<>(scalesNames);
+            convertToScalesComboBox.setEditable(false);
+            convertToScale = scalesNames[0];
+            convertToScalesComboBox.addActionListener(e -> convertToScale = (String) convertToScalesComboBox.getSelectedItem());
 
-            centerPanel.add(comboBox2);
+            centerPanel.add(convertToScalesComboBox);
 
             JButton converterButton = new JButton("Конвертировать");
             converterButton.addActionListener(e -> {
                 try {
                     double temperature = Double.parseDouble(temperatureField.getText());
-                    controller.convert(convertFrom, convertTo, temperature);
+                    controller.convert(convertFromScale, convertToScale, temperature);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(frame, "Температура должна быть числом", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 }

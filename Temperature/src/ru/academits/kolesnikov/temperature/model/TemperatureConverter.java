@@ -1,17 +1,25 @@
 package ru.academits.kolesnikov.temperature.model;
 
+import ru.academits.kolesnikov.temperature.model.scale.Scale;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TemperatureConverter implements Converter {
-    HashMap<String, Scales> scalesMap = new HashMap<>();
-    String[] scalesNames;
+    private final HashMap<String, Scale> scalesMap = new HashMap<>();
+    private final String[] scalesNames;
 
-    public TemperatureConverter() {
-        scalesMap.put("Цельсия", new Celsius());
-        scalesMap.put("Кельвина", new Kelvin());
-        scalesMap.put("Фаренгейта", new Fahrenheit());
+    public TemperatureConverter(ArrayList<Scale> scales) {
+        int scalesSize = scales.size();
+        scalesNames = new String[scalesSize];
 
-        scalesNames = new String[]{"Цельсия", "Кельвина", "Фаренгейта"};
+        for (int i = 0; i < scalesSize; i++) {
+            Scale scale = scales.get(i);
+            String scaleName = scale.getScaleName();
+
+            scalesMap.put(scaleName, scale);
+            scalesNames[i] = scaleName;
+        }
     }
 
     @Override
@@ -20,26 +28,26 @@ public class TemperatureConverter implements Converter {
     }
 
     @Override
-    public double convertToCelsius(String convertFrom, double temperature) {
-        if (!scalesMap.containsKey(convertFrom)) {
-            throw new IllegalStateException("Не возможно перевести из шкалы " + convertFrom);
+    public double convertToCelsius(String convertFromScale, double temperature) {
+        if (!scalesMap.containsKey(convertFromScale)) {
+            throw new IllegalArgumentException("Невозможно перевести из шкалы " + convertFromScale);
         }
 
-        return scalesMap.get(convertFrom).convertFromCelsius(temperature);
+        return scalesMap.get(convertFromScale).convertFromCelsius(temperature);
     }
 
     @Override
-    public double convertFromCelsius(String convertTo, double temperature) {
-        if (!scalesMap.containsKey(convertTo)) {
-            throw new IllegalStateException("Не возможно перевести в шкалу " + convertTo);
+    public double convertFromCelsius(String convertToScale, double temperature) {
+        if (!scalesMap.containsKey(convertToScale)) {
+            throw new IllegalArgumentException("Невозможно перевести в шкалу " + convertToScale);
         }
 
-        return scalesMap.get(convertTo).convertToCelsius(temperature);
+        return scalesMap.get(convertToScale).convertToCelsius(temperature);
     }
 
     @Override
-    public double convert(String convertFrom, String convertTo, double temperature) {
-        double celsiusTemperature = convertToCelsius(convertFrom, temperature);
-        return convertFromCelsius(convertTo, celsiusTemperature);
+    public double convert(String convertFromScale, String convertToScale, double temperature) {
+        double celsiusTemperature = convertToCelsius(convertFromScale, temperature);
+        return convertFromCelsius(convertToScale, celsiusTemperature);
     }
 }
