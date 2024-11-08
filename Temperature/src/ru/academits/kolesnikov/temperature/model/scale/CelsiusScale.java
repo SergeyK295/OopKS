@@ -1,6 +1,13 @@
 package ru.academits.kolesnikov.temperature.model.scale;
 
 public class CelsiusScale implements Scale {
+    private final String scaleName = "Цельсия";
+
+    @Override
+    public String getScaleName() {
+        return scaleName;
+    }
+
     @Override
     public double convertToCelsius(double temperature) {
         return temperature;
@@ -13,6 +20,6 @@ public class CelsiusScale implements Scale {
 
     @Override
     public String toString() {
-        return "Цельсия";
+        return scaleName;
     }
 }

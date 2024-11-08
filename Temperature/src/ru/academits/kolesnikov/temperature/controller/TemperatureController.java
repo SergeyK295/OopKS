@@ -21,6 +21,6 @@ public class TemperatureController implements Controller {
     @Override
     public void convert(Scale convertFromScale, Scale convertToScale, double temperature) {
         double convertedTemperature = converter.convert(convertFromScale, convertToScale, temperature);
-        view.showTemperature(convertToScale.toString(), convertedTemperature);
+        view.showTemperature(convertToScale.getScaleName(), convertedTemperature);
     }
 }

@@ -1,6 +1,13 @@
 package ru.academits.kolesnikov.temperature.model.scale;
 
 public class FahrenheitScale implements Scale {
+    private final String scaleName = "Фаренгейта";
+
+    @Override
+    public String getScaleName() {
+        return scaleName;
+    }
+
     @Override
     public double convertToCelsius(double temperature) {
         return (temperature * 1.8) + 32;
@@ -13,6 +20,6 @@ public class FahrenheitScale implements Scale {
 
     @Override
     public String toString() {
-        return "Фаренгейта";
+        return scaleName;
     }
 }

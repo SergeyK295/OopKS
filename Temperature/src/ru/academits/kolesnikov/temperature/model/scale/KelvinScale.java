@@ -1,6 +1,13 @@
 package ru.academits.kolesnikov.temperature.model.scale;
 
 public class KelvinScale implements Scale {
+    private final String scaleName = "Кельвина";
+
+    @Override
+    public String getScaleName() {
+        return scaleName;
+    }
+
     @Override
     public double convertToCelsius(double temperature) {
         return temperature + 273.15;
@@ -13,6 +20,6 @@ public class KelvinScale implements Scale {
 
     @Override
     public String toString() {
-        return "Кельвина";
+        return scaleName;
     }
 }
