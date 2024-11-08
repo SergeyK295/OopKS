@@ -1,6 +1,7 @@
 package ru.academits.kolesnikov.temperature.view;
 
 import ru.academits.kolesnikov.temperature.controller.Controller;
+import ru.academits.kolesnikov.temperature.model.scale.Scale;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +13,8 @@ public class DesktopView implements View, ItemListener {
     private JLabel resultLabel;
     private JPanel startPanel;
     private boolean isStarted;
-    private String convertFromScale;
-    private String convertToScale;
+    private Scale convertFromScale;
+    private Scale convertToScale;
 
     @Override
     public void start() {
@@ -38,12 +39,12 @@ public class DesktopView implements View, ItemListener {
             startPanel = new JPanel();
             startPanel.add(new JLabel("Конвертировать температуру из градусов"));
 
-            String[] scalesNames = controller.getScalesNames();
+            Scale[] scales = controller.getScales();
 
-            JComboBox<String> convertFromScalesComboBox = new JComboBox<>(scalesNames);
+            JComboBox<Scale> convertFromScalesComboBox = new JComboBox<>(scales);
             convertFromScalesComboBox.setEditable(false);
-            convertFromScale = scalesNames[0];
-            convertFromScalesComboBox.addActionListener(e -> convertFromScale = (String) convertFromScalesComboBox.getSelectedItem());
+            convertFromScale = scales[0];
+            convertFromScalesComboBox.addActionListener(e -> convertFromScale = (Scale) convertFromScalesComboBox.getSelectedItem());
             startPanel.add(convertFromScalesComboBox);
 
             JTextField temperatureField = new JTextField(10);
@@ -52,14 +53,14 @@ public class DesktopView implements View, ItemListener {
             JPanel centerPanel = new JPanel();
             centerPanel.add(new JLabel("в градусы"));
 
-            String temp = scalesNames[0];
-            scalesNames[0] = scalesNames[1];
-            scalesNames[1] = temp;
+            Scale temp = scales[0];
+            scales[0] = scales[1];
+            scales[1] = temp;
 
-            JComboBox<String> convertToScalesComboBox = new JComboBox<>(scalesNames);
+            JComboBox<Scale> convertToScalesComboBox = new JComboBox<>(scales);
             convertToScalesComboBox.setEditable(false);
-            convertToScale = scalesNames[0];
-            convertToScalesComboBox.addActionListener(e -> convertToScale = (String) convertToScalesComboBox.getSelectedItem());
+            convertToScale = scales[0];
+            convertToScalesComboBox.addActionListener(e -> convertToScale = (Scale) convertToScalesComboBox.getSelectedItem());
 
             centerPanel.add(convertToScalesComboBox);
 

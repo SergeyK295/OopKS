@@ -1,7 +1,11 @@
 package ru.academits.kolesnikov.temperature.controller;
 
-public interface Controller {
-    void convert(String convertFrom, String convertTo, double temperature);
+import ru.academits.kolesnikov.temperature.model.scale.Scale;
 
-    String[] getScalesNames();
+import java.util.ArrayList;
+
+public interface Controller {
+    Scale[] getScales();
+
+    void convert(Scale convertFromScale, Scale convertToScale, double temperature);
 }

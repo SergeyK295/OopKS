@@ -1,11 +1,9 @@
 package ru.academits.kolesnikov.temperature.model;
 
+import ru.academits.kolesnikov.temperature.model.scale.Scale;
+
 public interface Converter {
-    String[] getScalesNames();
+    Scale[] scales();
 
-    double convertToCelsius(String convertFrom, double temperature);
-
-    double convertFromCelsius(String convertTo, double temperature);
-
-    double convert (String convertFrom, String convertTo, double temperature);
+    double convert(Scale convertFromScale, Scale convertToScale, double temperature);
 }

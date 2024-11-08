@@ -9,14 +9,9 @@ import ru.academits.kolesnikov.temperature.model.scale.Scale;
 import ru.academits.kolesnikov.temperature.view.DesktopView;
 import ru.academits.kolesnikov.temperature.view.View;
 
-import java.util.ArrayList;
-
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Scale> scales = new ArrayList<>();
-        scales.addFirst(new KelvinScale());
-        scales.addFirst(new FahrenheitScale());
-        scales.addFirst(new CelsiusScale());
+        Scale[] scales = new Scale[]{new CelsiusScale(), new KelvinScale(), new FahrenheitScale()};
 
         Converter converter = new TemperatureConverter(scales);
         View view = new DesktopView();
