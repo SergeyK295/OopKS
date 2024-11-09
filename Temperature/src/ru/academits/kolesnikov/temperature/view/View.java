@@ -7,5 +7,5 @@ public interface View {
 
     void setController(Controller controller);
 
-    void showTemperature(String scales, double temperature);
+    void showTemperature(String scaleName, double temperature);
 }

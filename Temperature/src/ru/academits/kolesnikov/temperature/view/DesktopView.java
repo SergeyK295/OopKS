@@ -95,8 +95,8 @@ public class DesktopView implements View, ItemListener {
     }
 
     @Override
-    public void showTemperature(String name, double temperature) {
-        resultLabel.setText("Температура в градусах " + name + " = " + temperature);
+    public void showTemperature(String scaleName, double temperature) {
+        resultLabel.setText("Температура в градусах " + scaleName + " = " + temperature);
     }
 
     @Override
